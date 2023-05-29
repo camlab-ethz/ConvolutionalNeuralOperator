@@ -5,9 +5,8 @@ This repository is the official implementation of the paper **Convolutional Neur
 ## Requirements
 The code is based on python 3 (version 3.7) and the packages required can be installed with
 
------
 	python3 -m pip install -r requirements.txt
------
+
 
 #### Note:
 
@@ -28,18 +27,18 @@ We cover instances of the Poisson, Wave, Navier-Stokes, Allen-Cahn, Transport an
 
 Alternatively, run the script `download_data.py` which downloads all required data into the appropriate folder (it requires 'wget' to be installed on your system).
 
------
+
 	python3 download_data.py
------
+
 
 The "data.zip" needs to be unzipped.
 
 ## Models Training
 Each of the baselines described in the paper can be trained by running the python scripts 
 
------
+
 	Train**.py
------
+
 
 where ** holds for:
 
@@ -89,9 +88,9 @@ The following files correspond to:
 ## Hyperparameters Grid/Random Search
 Cross validation for each model can be run with:
 
------
+
 	python3 ModelSelection**.py
------
+
 
 where ** correspond to a model, as noted above.
 
@@ -104,9 +103,10 @@ If a slurm-base cluster is available, set sbatch=True and cluster="true" in the 
 ## Pretrained Models
 The models trained and used to compute the errors in Table 1 can be downloaded by running:
 
------
+
 	python3 download_models.py
------
+
+
 The compressed folder has to be unzipped!
 
 Models can also be downloaded from https://zenodo.org/record/7963379 .
@@ -152,4 +152,3 @@ In the "Error_Distribution_VaryingResolution.py" file, one should select the var
     poisson             : Poisson equation 
     wave                : Wave equation
     shear_layer         : Navier-Stokes equations
-
