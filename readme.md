@@ -2,7 +2,8 @@
 
 This repository is the official implementation of the paper **Convolutional Neural Operators for robust and accurate learning of PDEs**
 
-/figures/fig1.png /figures/fig2.png
+![alt text](/figures/fig1.png) ![alt text](/figures/fig2.png)
+
 
 
 ## Requirements
