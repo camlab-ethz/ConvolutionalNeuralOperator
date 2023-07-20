@@ -10,7 +10,7 @@ The CNO is tested on a novel set of benchmarks, termed as Representative PDE Ben
 
 we assess the test errors of the CNO and other baselines at different testing resolutions. Notably, for the Navier-Stokes, Poisson, and Wave equations benchmarks, we observe that the CNO is the only model that demonstrates approximate error invariance with respect to test resolution.
 
-
+![alt text](/figures/resolution_NS.png)
 
 
 ## Requirements
