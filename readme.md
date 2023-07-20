@@ -46,8 +46,9 @@ Implementation of the filters is borrowed from the paper *Alias-Free Generative 
 Their official github page is https://github.com/NVlabs/stylegan3.
 
 <br />
+
 **Note: To train or evaluate models other than CNO, please move the required files/scripts/modules from the folder _OtherModels to the main folder.**
-<br />
+
 
 ## Source Data
 We cover instances of the Poisson, Wave, Navier-Stokes, Allen-Cahn, Transport and Compressible Euler equations. Data can be downloaded from https://zenodo.org/record/7963379 (~10GB).
