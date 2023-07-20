@@ -2,7 +2,15 @@
 
 This repository is the official implementation of the paper **Convolutional Neural Operators for robust and accurate learning of PDEs** https://arxiv.org/pdf/2302.01178.pdf 
 
-![alt text](/figures/fig.png)
+![alt text](/figures/diag.png)
+
+The CNO is tested on a novel set of benchmarks, termed as Representative PDE Benchmarks (RPB), that span across a variety of PDEs ranging from linear elliptic and hyperbolic to nonlinear parabolic and hyperbolic PDEs, with possibly multiscale solutions. The CNO is either on-par or outperformed the tested baselines on all the benchmarks, both when testing in-distribution as well as in out-of-distribution testing.
+
+![alt text](/figures/table.png)
+
+we assess the test errors of the CNO and other baselines at different testing resolutions. Notably, for the Navier-Stokes, Poisson, and Wave equations benchmarks, we observe that the CNO is the only model that demonstrates approximate error invariance with respect to test resolution.
+
+
 
 
 ## Requirements
