@@ -51,7 +51,7 @@ Their official github page is https://github.com/NVlabs/stylegan3.
 
 
 ## Source Data
-We cover instances of the Poisson, Wave, Navier-Stokes, Allen-Cahn, Transport and Compressible Euler equations. Data can be downloaded from https://zenodo.org/record/7963379 (~10GB).
+We cover instances of the Poisson, Wave, Navier-Stokes, Allen-Cahn, Transport and Compressible Euler equations. Data can be downloaded from https://zenodo.org/records/10058382 (~2.5GB).
 
 Alternatively, run the script `download_data.py` which downloads all required data into the appropriate folder (it requires 'wget' to be installed on your system).
 
@@ -73,8 +73,7 @@ where ** holds for:
 	- CNO:    CNO model
 	- FNO:    FNO model
 	- DON:    DeepONet model
-	- UNet:   UNet model
-    - ResNet: Feedforward neural network (FFNN) with residual connections
+	...
 
 The models' hyperparameter can be specified in the corresponding python scripts as well.
 
@@ -87,6 +86,7 @@ To select the benchmark experiment for FNO and CNO to be trained, the variable "
     allen               : Allen-Cahn equation
     shear_layer         : Navier-Stokes equations
     airfoil             : Compressible Euler equations
+    darcy               : Darcy Flow
 
 
 To select the benchmark experiment for UNet, DeepONet and FFNN to be trained, the variable "which_example" in a corresponding script Tran**.py should have one of the following values:
@@ -98,6 +98,7 @@ To select the benchmark experiment for UNet, DeepONet and FFNN to be trained, th
     allen_cahn          : Allen-Cahn equation
     shear_layer         : Navier-Stokes equations
     airfoil             : Compressible Euler equations
+    darcy               : darcy Flow
 
 
 #### Note
@@ -152,6 +153,7 @@ In the "ErrorDistribution.py" file, one should select the variable "which", corr
     allen               : Allen-Cahn equation
     shear_layer         : Navier-Stokes equations
     airfoil             : Compressible Euler equations
+    darcy               : Darcy Flow
 
 In the same file, one can set a variable "plot = True" to plot a random sample and predictions for the CNO, FNO and UNet models.
 One can also set "plot = False" to compute the errors for the CNO, FNO and UNet models. By selecting "in_dist = False", one obtains out-of-distribution test errors. 
@@ -169,14 +171,4 @@ with model being either "ResNet", "DON", "UNet" and which being:
     allen_cahn          : Allen-Cahn equation
     shear_layer         : Navier-Stokes equations
     airfoil             : Compressible Euler equations
-
-
-### Varying resolution
-
-The errors of the best performing CNO, FNO and UNet models for different resolutions can be computed by running the scripts "ErrorDistribution_VaryingResolution.py".
-
-In the "Error_Distribution_VaryingResolution.py" file, one should select the variable "which", corresponding to a benchmark experiment. It should have one of the following values:
-
-    poisson             : Poisson equation 
-    wave                : Wave equation
-    shear_layer         : Navier-Stokes equations
+    darcy               : Darcy Flow
