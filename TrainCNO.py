@@ -8,51 +8,44 @@ import torch
 from torch.utils.tensorboard import SummaryWriter
 from tqdm import tqdm
 
-from Problems.Benchmarks import Airfoil, DiscContTranslation, ContTranslation, AllenCahn, SinFrequency, WaveEquation, ShearLayer
 
-if len(sys.argv) == 1:
+from Problems.CNOBenchmarks import Darcy, Airfoil, DiscContTranslation, ContTranslation, AllenCahn, SinFrequency, WaveEquation, ShearLayer
 
+
+
+if len(sys.argv) == 2:
+    
     training_properties = {
-        "learning_rate": 0.0005, 
-        "weight_decay": 1e-10,
+        "learning_rate": 0.001, 
+        "weight_decay": 1e-6,
         "scheduler_step": 10,
         "scheduler_gamma": 0.98,
-        "epochs": 500,
+        "epochs": 1000,
         "batch_size": 16,
-        "exp": 1, #Do we use L1 or L2 errors? Default: L1
-        "training_samples": 256, #How many training samples?
+        "exp": 1,                # Do we use L1 or L2 errors? Default: L1
+        "training_samples": 256  # How many training samples?
     }
     model_architecture_ = {
-       
-        #----------------------------------------------------------------------
+        
         #Parameters to be chosen with model selection:
-            
-        "N_layers": 6, #Number of (D) + (U) layers. In our experiments, N_layers must be even.
-        "kernel_size": 3, #Kernel size.
-        "channel_multiplier": 32, #Parameter d_e (how the number of channels changes)
+        "N_layers": 3,            # Number of (D) & (U) blocks 
+        "channel_multiplier": 32, # Parameter d_e (how the number of channels changes)
+        "N_res": 4,               # Number of (R) blocks in the middle networs.
+        "N_res_neck" : 6,         # Number of (R) blocks in the BN
         
-        "N_res": 6, #Number of (R) blocks.
-        "res_len": 2, #Coefficienr r in (R) definition.
-        
-        #----------------------------------------------------------------------
-        #Parameters that depend on the problem: 
-        
-        "in_size": 64, #Resolution of the computational grid
-        "retrain": 4, #Random seed
-        
-        #----------------------------------------------------------------------
-        #We fix the following parameters:
+        #Other parameters:
+        "in_size": 64,            # Resolution of the computational grid
+        "retrain": 4,             # Random seed
+        "kernel_size": 3,         # Kernel size.
+        "FourierF": 0,            # Number of Fourier Features in the input channels. Default is 0.
+        "activation": 'cno_lrelu',# cno_lrelu or lrelu
         
         #Filter properties:
-        "cutoff_den": 2.0001, #
-        "lrelu_upsampling": 2, #Coefficient N_{\sigma}. Default is 2.
-        "half_width_mult": 1, #Coefficient c_h. Default is 1
-        "filter_size": 6, # 2xfilter_size is the number of taps N_{tap}. Default is 6.
-        "radial_filter": 0, #Is the filter radially symmetric? Default is 0 - NO.
-
-        "FourierF": 0, #Number of Fourier Features in the input channels. Default is 0.
-
-        #----------------------------------------------------------------------
+        "cutoff_den": 2.0001,     # Cutoff parameter.
+        "lrelu_upsampling": 2,    # Coefficient N_{\sigma}. Default is 2.
+        "half_width_mult": 0.8,   # Coefficient c_h. Default is 1
+        "filter_size": 6,         # 2xfilter_size is the number of taps N_{tap}. Default is 6.
+        "radial_filter": 0,       # Is the filter radially symmetric? Default is 0 - NO.
     }
     
     #   "which_example" can be 
@@ -64,12 +57,13 @@ if len(sys.argv) == 1:
     #   allen               : Allen-Cahn equation
     #   shear_layer         : Navier-Stokes equations
     #   airfoil             : Compressible Euler equations
-    
+    #   darcy               : Darcy Flow
 
-    which_example = "airfoil"
+    which_example = sys.argv[1]
+    #which_example = "shear_layer"
 
     # Save the models here:
-    folder = "TrainedModels/"+"CNO_"+which_example
+    folder = "TrainedModels/"+"CNO_"+which_example+"_1"
         
 else:
     
@@ -101,7 +95,7 @@ df = pd.DataFrame.from_dict([model_architecture_]).T
 df.to_csv(folder + '/net_architecture.txt', header=False, index=True, mode='w')
 
 if which_example == "shear_layer":
-    example = ShearLayer(model_architecture_, device, batch_size, training_samples)
+    example = ShearLayer(model_architecture_, device, batch_size, training_samples, size = 64)
 elif which_example == "poisson":
     example = SinFrequency(model_architecture_, device, batch_size, training_samples)
 elif which_example == "wave_0_5":
@@ -113,12 +107,14 @@ elif which_example == "cont_tran":
 elif which_example == "disc_tran":
     example = DiscContTranslation(model_architecture_, device, batch_size, training_samples)
 elif which_example == "airfoil":
+    model_architecture_["in_size"] = 128
     example = Airfoil(model_architecture_, device, batch_size, training_samples)
+elif which_example == "darcy":
+    example = Darcy(model_architecture_, device, batch_size, training_samples)
 else:
     raise ValueError()
-
+    
 #-----------------------------------Train--------------------------------------
-
 model = example.model
 n_params = model.print_size()
 train_loader = example.train_loader #TRAIN LOADER
@@ -134,13 +130,19 @@ elif p == 2:
     loss = torch.nn.MSELoss()
     
 best_model_testing_error = 1000 #Save the model once it has less than 1000% relative L1 error
-patience = int(0.1 * epochs)    # Earlt stopping parameter
+patience = int(0.2 * epochs)    # Early stopping parameter
 counter = 0
+
+if str(device) == 'cpu':
+    print("------------------------------------------")
+    print("YOU ARE RUNNING THE CODE ON A CPU.")
+    print("WE SUGGEST YOU TO RUN THE CODE ON A GPU!")
+    print("------------------------------------------")
+    print(" ")
+
 
 for epoch in range(epochs):
     with tqdm(unit="batch", disable=False) as tepoch:
-        
-        #Disable : Should we disable the printing of the error report per epoch?
         
         model.train()
         tepoch.set_description(f"Epoch {epoch}")
@@ -165,7 +167,7 @@ for epoch in range(epochs):
             tepoch.set_postfix({'Batch': step + 1, 'Train loss (in progress)': train_mse})
 
         writer.add_scalar("train_loss/train_loss", train_mse, epoch)
-
+        
         with torch.no_grad():
             model.eval()
             test_relative_l2 = 0.0
@@ -186,18 +188,18 @@ for epoch in range(epochs):
             test_relative_l2 /= len(val_loader)
 
             for step, (input_batch, output_batch) in enumerate(train_loader):
-                    input_batch = input_batch.to(device)
-                    output_batch = output_batch.to(device)
-                    output_pred_batch = model(input_batch)
+                input_batch = input_batch.to(device)
+                output_batch = output_batch.to(device)
+                output_pred_batch = model(input_batch)
                     
-                    if which_example == "airfoil": #Mask the airfoil shape
-                        output_pred_batch[input_batch==1] = 1
-                        output_batch[input_batch==1] = 1
+                if which_example == "airfoil": #Mask the airfoil shape
+                    output_pred_batch[input_batch==1] = 1
+                    output_batch[input_batch==1] = 1
 
                     loss_f = torch.mean(abs(output_pred_batch - output_batch)) / torch.mean(abs(output_batch)) * 100
                     train_relative_l2 += loss_f.item()
             train_relative_l2 /= len(train_loader)
-
+            
             writer.add_scalar("train_loss/train_loss_rel", train_relative_l2, epoch)
             writer.add_scalar("val_loss/val_loss", test_relative_l2, epoch)
 
