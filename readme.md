@@ -14,7 +14,7 @@ The CNO is tested on a novel set of benchmarks, termed as Representative PDE Ben
 </p>
 <br />
 
-We assess the test errors of the CNO and other baselines at different testing resolutions. Notably, for the Navier-Stokes, Poisson, and Wave equations benchmarks, we observe that the CNO is the only model that demonstrates approximate error invariance with respect to test resolution.
+We assess the test errors of the CNO and other baselines at different testing resolutions notably, for the Navier-Stokes equations benchmarks. We observe that in this case, the CNO is the only model that demonstrates approximate error invariance with respect to test resolution.
 
 <p align="center">
  <img src="/figures/resolution_NS.png" width="500"/>
@@ -51,7 +51,7 @@ Their official github page is https://github.com/NVlabs/stylegan3.
 
 
 ## Source Data
-We cover instances of the Poisson, Wave, Navier-Stokes, Allen-Cahn, Transport and Compressible Euler equations. Data can be downloaded from https://zenodo.org/records/10058382 (~2.5GB).
+We cover instances of the Poisson, Wave, Navier-Stokes, Allen-Cahn, Transport and Compressible Euler equations and Darcy flow. Data can be downloaded from https://zenodo.org/records/10058382 (~2.8GB).
 
 Alternatively, run the script `download_data.py` which downloads all required data into the appropriate folder (it requires 'wget' to be installed on your system).
 
@@ -88,31 +88,16 @@ To select the benchmark experiment for FNO and CNO to be trained, the variable "
     airfoil             : Compressible Euler equations
     darcy               : Darcy Flow
 
-
-To select the benchmark experiment for UNet, DeepONet and FFNN to be trained, the variable "which_example" in a corresponding script Tran**.py should have one of the following values:
-
-    poisson             : Poisson equation 
-    wave                : Wave equation
-    cont_t              : Smooth Transport
-    disc_t              : Discontinuous Transport
-    allen_cahn          : Allen-Cahn equation
-    shear_layer         : Navier-Stokes equations
-    airfoil             : Compressible Euler equations
-    darcy               : darcy Flow
-
-
 #### Note
 
 
 
 The following files correspond to:
 
-	Problems/Benchmark.py :       Dataloader for CNO model
-	Problems/FNOBenchmark.py :    Dataloader for FNO model
-	Problems/BenchMarksUNet.py:   Dataloader for UNet model
-	Problems/BenchmarksDON.py:    Dataloader for DeepONet model
-	Problems/BenchmarksResNet.py: Dataloader for FFNN model
-	
+	Problems/CNOBenchmark.py :            Dataloader for CNO model
+	_OtherBenchamrks/FNOBenchmark.py :    Dataloader for FNO model
+	_OtherBenchamrks/BenchmarksDON.py:    Dataloader for DeepONet model
+        ...	
 
 ## Hyperparameters Grid/Random Search
 Cross validation for each model can be run with:
@@ -144,16 +129,7 @@ Models can also be downloaded from https://zenodo.org/record/7963379 .
 
 The errors of the best performing CNO, FNO and UNet models (Table 1) can be computed by running the scripts "ErrorDistribution.py".
 
-In the "ErrorDistribution.py" file, one should select the variable "which", corresponding to a benchmark experiment. It should have one of the following values:
-
-    poisson             : Poisson equation 
-    wave_0_5            : Wave equation
-    cont_tran           : Smooth Transport
-    disc_tran           : Discontinuous Transport
-    allen               : Allen-Cahn equation
-    shear_layer         : Navier-Stokes equations
-    airfoil             : Compressible Euler equations
-    darcy               : Darcy Flow
+In the "ErrorDistribution.py" file, one should select the variable "which", corresponding to a benchmark experiment. 
 
 In the same file, one can set a variable "plot = True" to plot a random sample and predictions for the CNO, FNO and UNet models.
 One can also set "plot = False" to compute the errors for the CNO, FNO and UNet models. By selecting "in_dist = False", one obtains out-of-distribution test errors. 
@@ -162,13 +138,4 @@ The errors of the best performing FFNN, DeepONet or Unet (Table 1) can be comput
 
 	python3 ComputeErrors.py model which_example
 
-with model being either "ResNet", "DON", "UNet" and which being:
-
-    poisson             : Poisson equation 
-    wave                : Wave equation
-    cont_t              : Smooth Transport
-    disc_t              : Discontinuous Transport
-    allen_cahn          : Allen-Cahn equation
-    shear_layer         : Navier-Stokes equations
-    airfoil             : Compressible Euler equations
-    darcy               : Darcy Flow
+with model being either "ResNet", "DON", "UNet" and which being as noted above.
