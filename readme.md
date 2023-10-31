@@ -112,30 +112,15 @@ The hyperparameters of the best-performing models reported in the Supplementary 
 
 
 #### Note
-If a slurm-base cluster is available, set sbatch=True and cluster="true" in the scripts. We ran the codes on a local cluster.
+If a slurm-base cluster is available, set sbatch=True and cluster="true" in the scripts. We ran the codes on a local cluster (Euler cluster).
 
-## Pretrained Models
-The models trained and used to compute the errors in Table 1 can be downloaded by running:
-
-
-	python3 download_models.py
-
-
-The compressed folder has to be unzipped!
-
-Models can also be downloaded from https://zenodo.org/record/7963379 .
 
 ## Error Computations
 
-The errors of the best performing CNO, FNO and UNet models (Table 1) can be computed by running the scripts "ErrorDistribution.py".
+To compute the relative L1 median errors of the CNO, FNO and UNet models, one scould run the scripts "ErrorDistribution.py".
 
 In the "ErrorDistribution.py" file, one should select the variable "which", corresponding to a benchmark experiment. 
 
 In the same file, one can set a variable "plot = True" to plot a random sample and predictions for the CNO, FNO and UNet models.
 One can also set "plot = False" to compute the errors for the CNO, FNO and UNet models. By selecting "in_dist = False", one obtains out-of-distribution test errors. 
 
-The errors of the best performing FFNN, DeepONet or Unet (Table 1) can be computed by running the scripts "ComputeErrors.py".
-
-	python3 ComputeErrors.py model which_example
-
-with model being either "ResNet", "DON", "UNet" and which being as noted above.
