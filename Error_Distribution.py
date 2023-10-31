@@ -6,9 +6,7 @@ import numpy as np
 import pandas as pd
 #import seaborn as sn
 import torch
-import json
 import ast
-import os
 import scipy
 import torch.nn as nn
 
@@ -24,9 +22,9 @@ from random import randint
 def load_data(folder, which_model, device, which_example, in_size = 64, batch_size = 32, training_samples = 1, in_dist = True):
     
     if which_model == "CNO":
-        from Problems.Benchmarks import Airfoil, DiscContTranslation, ContTranslation, AllenCahn, SinFrequency, WaveEquation, ShearLayer
+        from Problems.CNOBenchmarks import Darcy, Airfoil, DiscContTranslation, ContTranslation, AllenCahn, SinFrequency, WaveEquation, ShearLayer
     elif which_model == "FNO":
-        from Problems.FNOBenchmarks import Airfoil, DiscContTranslation, ContTranslation, AllenCahn, SinFrequency, WaveEquation, ShearLayer
+        from Problems.FNOBenchmarks import Darcy, Airfoil, DiscContTranslation, ContTranslation, AllenCahn, SinFrequency, WaveEquation, ShearLayer
 
     model_architecture_ = dict()
     with open(folder + "/net_architecture.txt") as f:
@@ -48,6 +46,8 @@ def load_data(folder, which_model, device, which_example, in_size = 64, batch_si
             example = AllenCahn(model_architecture_, device, batch_size, in_dist = in_dist)
         elif which_example == "cont_tran":
             example = ContTranslation(model_architecture_, device, batch_size, in_dist = in_dist)
+        elif which_example == "darcy":
+            example = Darcy(model_architecture_, device, batch_size, in_dist = in_dist)
         elif which_example == "disc_tran":
             example = DiscContTranslation(model_architecture_, device, batch_size, training_samples, in_dist = in_dist)
         elif which_example == "airfoil":
@@ -68,6 +68,8 @@ def load_data(folder, which_model, device, which_example, in_size = 64, batch_si
             example = AllenCahn(model_architecture_, device, batch_size, in_dist = in_dist)
         elif which_example == "cont_tran":
             example = ContTranslation(model_architecture_, device, batch_size, training_samples, in_dist = in_dist)
+        elif which_example == "darcy":
+            example = Darcy(model_architecture_, device, batch_size, training_samples, in_dist = in_dist)
         elif which_example == "disc_tran":
             example = DiscContTranslation(model_architecture_, device, batch_size,training_samples, in_dist = in_dist)
         elif which_example == "airfoil":
@@ -272,7 +274,7 @@ def plot_samples(which_model, data_loader, model, p, n, cmap = "jet", which = "s
 
 
 def plot_samples_different_models(which_models, data_loaders, models, p, n, which = "shear_layer"):
-   
+    
     preds = []
     
     for w, data_loader in enumerate(data_loaders):
@@ -368,6 +370,7 @@ device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 #   allen               : Allen-Cahn equation
 #   shear_layer         : Navier-Stokes equations
 #   airfoil             : Compressible Euler equations
+#   darcy               : Darcy Flow
 
 which = "allen"
 in_dist = False
@@ -521,7 +524,7 @@ elif plot:
     random.seed()
     n = randint(0,N)
     plot_samples_different_models(["CNO", "FNO", "UNET"], 
-                                  [data_loader_CNO, data_loader_FNO, data_loader_UNET], 
-                                  [modelCNO, modelFNO, modelUNET], 
-                                  1, n, which = which)
+                                [data_loader_CNO, data_loader_FNO, data_loader_UNET], 
+                                [modelCNO, modelFNO, modelUNET], 
+                                1, n, which = which)
     

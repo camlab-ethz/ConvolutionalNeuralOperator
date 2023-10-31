@@ -6,7 +6,7 @@ import numpy as np
 
 np.random.seed(0)
 
-folder_name = "MODEL_SELECTION_FNO_VaryingSamples_1"
+folder_name = "MODEL_SELECTION_FNO_1"
 cluster = "false"
 
 
@@ -18,16 +18,19 @@ all_training_properties = {
     "epochs": [750],
     "batch_size": [32],
     "exp": [1],
-    "training_samples": [90, 190, 290, 390, 490, 590, 690, 790]
+    "training_samples": [750]
 }
+
 all_model_architecture = {
     "width": [64],
-    "modes": [20],
+    "modes": [16],
     "FourierF": [0],
     "n_layers": [5],
+    "padding": [0],
+    "include_grid": [1],
     "retrain": [4],
-    "filtered": [0],
 }
+
 
 
 which_example = "shear_layer"

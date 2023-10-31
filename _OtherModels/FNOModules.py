@@ -1,7 +1,6 @@
 """
-Code adapted from https://arxiv.org/abs/2010.08895 : Fourier Neural Operator for Parametric Partial Differential Equations
+Code adapted from https://arxiv.org/abs/2010.08895
 """
-
 import os
 
 import numpy as np
@@ -10,7 +9,6 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 from debug_tools import format_tensor_size
-#from training.networks_stylegan3 import SynthesisLayer
 
 os.environ['KMP_DUPLICATE_LIB_OK'] = 'True'
 
@@ -18,9 +16,10 @@ torch.manual_seed(0)
 np.random.seed(0)
 
 
-################################################################
+###############################################################################
 #  1d fourier layer
-################################################################
+###############################################################################
+
 class SpectralConv1d(nn.Module):
     def __init__(self, in_channels, out_channels, modes1):
         super(SpectralConv1d, self).__init__()
@@ -164,9 +163,10 @@ class SpectralConv2d(nn.Module):
         x = torch.fft.irfft2(out_ft, s=(x.size(-2), x.size(-1)))
         return x
 
+#------------------------------------------------------------------------------
 
 class FNO2d(nn.Module):
-    def __init__(self, fno_architecture, device=None, padding_frac=1 / 4, in_channels = 1, grid = True):
+    def __init__(self, fno_architecture, in_channels = 1, out_channels = 1, device=None):
         super(FNO2d, self).__init__()
 
         """
@@ -186,18 +186,15 @@ class FNO2d(nn.Module):
         self.width = fno_architecture["width"]
         self.n_layers = fno_architecture["n_layers"]
         self.retrain_fno = fno_architecture["retrain"]
+        self.padding = fno_architecture["padding"]
+        self.include_grid = fno_architecture["include_grid"]
+        self.input_dim = in_channels
+        self.act  = nn.LeakyReLU() 
+        self.device = device
 
         torch.manual_seed(self.retrain_fno)
-        self.padding_frac = padding_frac
         
-        #self.act = nn.GELU()
-        self.act  = nn.LeakyReLU() 
-        
-        self.input_dim = in_channels
-        
-        grid = True
-        self.grid = grid
-        if self.grid:
+        if self.include_grid == 1:
             self.r = nn.Sequential(nn.Linear(self.input_dim+2, 128),
                                    self.act,
                                    nn.Linear(128, self.width))
@@ -213,12 +210,11 @@ class FNO2d(nn.Module):
 
         
         self.q = nn.Sequential(nn.Linear(self.width, 128),
-                               self.act,
-                               nn.Linear(128, 1))
+                                self.act,
+                                nn.Linear(128, out_channels))
         
         self.to(device)
-        self.device = device
-
+                
     def get_grid(self, samples, res):
         size_x = size_y = res
         samples = samples
@@ -231,23 +227,19 @@ class FNO2d(nn.Module):
         return grid
 
     def forward(self, x):
-        #print(x.shape)
-
-        self.grid = True
-        
-        if self.grid:
+                
+        if self.include_grid == 1:
             grid = self.get_grid(x.shape[0], x.shape[1]).to(self.device)
             x = torch.cat((grid, x), -1)
-
+        
         x = self.r(x)
         x = x.permute(0, 3, 1, 2)
-
-        #x1_padding = int(round(x.shape[-1] * self.padding_frac))
-        #x2_padding = int(round(x.shape[-2] * self.padding_frac))
         
-        x1_padding = 4
-        x2_padding = 4
-        x = F.pad(x, [0, x1_padding, 0, x2_padding])
+        x1_padding =  self.padding
+        x2_padding =  self.padding
+                
+        if self.padding>0: 
+            x = F.pad(x, [0, x1_padding, 0, x2_padding])
 
         for k, (s, c) in enumerate(zip(self.spectral_list, self.conv_list)):
 
@@ -256,10 +248,13 @@ class FNO2d(nn.Module):
             x = x1 + x2
             if k != self.n_layers - 1:
                 x = self.act(x)
-
-        x = x[..., :-x1_padding, :-x2_padding]
+        
+        del x1
+        del x2
+        
+        if self.padding > 0:
+            x = x[..., :-x1_padding, :-x2_padding]            
         x = x.permute(0, 2, 3, 1)
-
         x = self.q(x)
 
         return x
@@ -276,4 +271,4 @@ class FNO2d(nn.Module):
 
         return nparams
 
-#----------------------------------------------------------------------------------------------------
+#------------------------------------------------------------------------------

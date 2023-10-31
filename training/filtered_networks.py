@@ -311,16 +311,13 @@ class SynthesisLayer(torch.nn.Module):
             f'in_size={list(self.in_size)}, out_size={list(self.out_size)},',
             f'in_channels={self.in_channels:d}, out_channels={self.out_channels:d}'])
 
-#----------------------------------------------------------------------------
-#----------------------------------------------------------------------------
+
 #----------------------------------------------------------------------------
 #----------------------------------------------------------------------------
 
 @persistence.persistent_class
 class LReLu(torch.nn.Module):
     def __init__(self,
-        is_critically_sampled,          # Does this layer use critical sampling?  #NOT IMPORTANT FOR CNO.
-
         in_channels,                    # Number of input channels.
         out_channels,                   # Number of output channels.
         in_size,                        # Input spatial size: int or [width, height].
@@ -329,13 +326,15 @@ class LReLu(torch.nn.Module):
         out_sampling_rate,              # Output sampling rate (s).
         in_cutoff,                      # Input cutoff frequency (f_c).
         out_cutoff,                     # Output cutoff frequency (f_c).
-        in_half_width,                  # Input transition band half-width (f_h).
+        in_half_width,                  # Input  transition band half-width (f_h).
         out_half_width,                 # Output Transition band half-width (f_h).
 
         # Hyperparameters.
         filter_size         = 6,        # Low-pass filter size relative to the lower resolution when up/downsampling.
         lrelu_upsampling    = 2,        # Relative sampling rate for leaky ReLU. Ignored for final the ToRGB layer.
-        use_radial_filters  = False,     # Use radially symmetric downsampling filter? Ignored for critically sampled layers.
+        
+        is_critically_sampled = False,  # Does this layer use critical sampling?  #NOT IMPORTANT FOR CNO.
+        use_radial_filters    = False,  # Use radially symmetric downsampling filter?
     ):
         super().__init__()
         
@@ -391,7 +390,7 @@ class LReLu(torch.nn.Module):
         gain = np.sqrt(2)
         slope = 0.2
         x = filtered_lrelu.filtered_lrelu(x=x, fu=self.up_filter, fd=self.down_filter, b=self.bias.to(x.dtype),
-            up=self.up_factor, down=self.down_factor, padding=self.padding, gain=gain, slope=slope, clamp=self.conv_clamp)
+            up=self.up_factor, down=self.down_factor, padding=self.padding, gain=gain, slope=slope, clamp=None)
 
 
         # Ensure correct shape and dtype.
@@ -431,3 +430,41 @@ class LReLu(torch.nn.Module):
             f'in_half_width={self.in_half_width:g}, out_half_width={self.out_half_width:g},',
             f'in_size={list(self.in_size)}, out_size={list(self.out_size)},',
             f'in_channels={self.in_channels:d}, out_channels={self.out_channels:d}'])
+
+#----------------------------------------------------------------------------
+#----------------------------------------------------------------------------
+
+import torch.nn as nn
+
+class LReLu_regular(torch.nn.Module):
+    def __init__(self,
+        in_channels,                    # Number of input channels.
+        out_channels,                   # Number of output channels.
+        in_size,                        # Input spatial size: int or [width, height].
+        out_size,                       # Output spatial size: int or [width, height].
+        in_sampling_rate,               # Input sampling rate (s).
+        out_sampling_rate,              # Output sampling rate (s).
+    ):
+        super().__init__()
+        
+        
+        self.activation = nn.LeakyReLU() 
+        
+        self.in_channels = in_channels
+        self.out_channels = out_channels
+        self.in_size = in_size
+        self.out_size = out_size
+        self.in_sampling_rate = in_sampling_rate
+        self.out_sampling_rate = out_sampling_rate
+
+                    
+        #------------------------------------------------------------------------------------------------
+
+    def forward(self, x):
+        
+        if self.in_sampling_rate == 2*self.out_sampling_rate:
+            return nn.AvgPool2d(2, stride=2, padding=0)(self.activation(x))
+        elif self.in_sampling_rate == 4*self.out_sampling_rate:
+            return nn.AvgPool2d(4, stride=4, padding=1)(self.activation(x))
+        else:
+            return nn.functional.interpolate(self.activation(x), size=self.out_size)

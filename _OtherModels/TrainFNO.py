@@ -8,26 +8,27 @@ import torch
 from torch.utils.tensorboard import SummaryWriter
 from tqdm import tqdm
 
-from Problems.FNOBenchmarks import Airfoil, DiscContTranslation, ContTranslation, AllenCahn, SinFrequency, WaveEquation, ShearLayer
-from datetime import date
+from Problems.FNOBenchmarks import Darcy, Airfoil, DiscContTranslation, ContTranslation, AllenCahn, SinFrequency, WaveEquation, ShearLayer
 
-if len(sys.argv) == 1:
+if len(sys.argv) == 2:
 
     training_properties = {
         "learning_rate": 0.001,
         "weight_decay": 1e-8,
         "scheduler_step": 0.97,
         "scheduler_gamma": 10,
-        "epochs": 600,
+        "epochs": 1000,
         "batch_size": 16,
         "exp": 1,
         "training_samples": 256,
     }
     fno_architecture_ = {
-        "width": 32,
+        "width": 64,
         "modes": 16,
         "FourierF" : 0, #Number of Fourier Features in the input channels. Default is 0.
-        "n_layers": 2, #Number of Fourier layers
+        "n_layers": 4, #Number of Fourier layers
+        "padding": 0,
+        "include_grid":1,
         "retrain": 4, #Random seed
     }
     
@@ -40,12 +41,13 @@ if len(sys.argv) == 1:
     #   allen               : Allen-Cahn equation
     #   shear_layer         : Navier-Stokes equations
     #   airfoil             : Compressible Euler equations
+    #   darcy               : Darcy Flow
     
-
-    which_example = "airfoil"
+    which_example = sys.argv[1]
+    #which_example = "shear_layer"
 
     # Save the models here:
-    folder = "TrainedModels/"+"FNO_"+which_example
+    folder = "TrainedModels/"+"FNO_"+which_example+"_tmp1"
 
 else:
     folder = sys.argv[1]
@@ -81,6 +83,11 @@ elif which_example == "disc_tran":
     example = DiscContTranslation(fno_architecture_, device, batch_size,training_samples)
 elif which_example == "airfoil":
     example = Airfoil(fno_architecture_, device, batch_size, training_samples)
+elif which_example == "shear_layer_smooth":
+    example = ShearLayerSmooth(fno_architecture_, device, batch_size, training_samples)
+
+elif which_example == "darcy":
+    example = Darcy(fno_architecture_, device, batch_size,training_samples)
 else:
     raise ValueError("the variable which_example has to be one between darcy")
 
@@ -107,7 +114,7 @@ if p == 1:
 elif p == 2:
     loss = torch.nn.MSELoss()
 best_model_testing_error = 300
-patience = int(0.1 * epochs)
+patience = int(0.25 * epochs)
 counter = 0
 for epoch in range(epochs):
     with tqdm(unit="batch", disable=False) as tepoch:
