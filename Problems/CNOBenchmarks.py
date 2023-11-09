@@ -16,6 +16,8 @@ torch.manual_seed(0)
 np.random.seed(0)
 random.seed(0)
 
+file_path = '/scratch/PDEDatasets/CNO/new_data'
+
 
 
 #------------------------------------------------------------------------------
@@ -99,11 +101,11 @@ class ShearLayerDataset(Dataset):
         
         if in_dist:
             if self.s==64:
-                self.file_data = "data/NavierStokes_64x64_IN.h5" #In-distribution file 64x64               
+                self.file_data = file_path + "/NavierStokes_64x64_IN.h5" #In-distribution file 64x64               
             else:
-                self.file_data = "data/NavierStokes_128x128_IN.h5"   #In-distribution file 128x128
+                self.file_data = file_path + "/NavierStokes_128x128_IN.h5"   #In-distribution file 128x128
         else:
-            self.file_data = "data/NavierStokes_128x128_OUT.h5"  #Out-of_-distribution file 128x128
+            self.file_data = file_path + "/NavierStokes_128x128_OUT.h5"  #Out-of_-distribution file 128x128
         
         self.reader = h5py.File(self.file_data, 'r') 
         self.N_max = 1024
@@ -256,9 +258,9 @@ class SinFrequencyDataset(Dataset):
         
         #The file:
         if in_dist:
-            self.file_data = "data/PoissonData_64x64_IN.h5"
+            self.file_data = file_path + "/PoissonData_64x64_IN.h5"
         else:
-            self.file_data = "data/PoissonData_64x64_OUT.h5"
+            self.file_data = file_path + "/PoissonData_64x64_OUT.h5"
 
         #Load normalization constants from the TRAINING set:
         self.reader = h5py.File(self.file_data, 'r')
@@ -285,7 +287,7 @@ class SinFrequencyDataset(Dataset):
         
         #Load different resolutions
         if s!=64:
-            self.file_data = "data/PoissonData_NEW_s" + str(s) + ".h5"
+            self.file_data = file_path + "/PoissonData_NEW_s" + str(s) + ".h5"
             self.start = 0
         
         #If the reader changed.
@@ -402,9 +404,9 @@ class WaveEquationDataset(Dataset):
         
         #Default file:       
         if in_dist:
-            self.file_data = "data/WaveData_64x64_IN.h5"
+            self.file_data = file_path + "/WaveData_64x64_IN.h5"
         else:
-            self.file_data = "data/WaveData_64x64_OUT.h5"
+            self.file_data = file_path + "/WaveData_64x64_OUT.h5"
 
         self.reader = h5py.File(self.file_data, 'r')
         
@@ -433,7 +435,7 @@ class WaveEquationDataset(Dataset):
         
         self.s = s
         if s!=64:
-            self.file_data = "data/WaveData_24modes_s" + str(s) + ".h5"
+            self.file_data = file_path + "/WaveData_24modes_s" + str(s) + ".h5"
             self.start = 0
         
         #If the reader changed:
@@ -549,9 +551,9 @@ class AllenCahnDataset(Dataset):
 
         #Default file:
         if in_dist:
-            self.file_data = "data/AllenCahn_64x64_IN.h5"
+            self.file_data = file_path + "/AllenCahn_64x64_IN.h5"
         else:            
-            self.file_data = "data/AllenCahn_64x64_OUT.h5"
+            self.file_data = file_path + "/AllenCahn_64x64_OUT.h5"
         self.reader = h5py.File(self.file_data, 'r')
         
         #Load normalization constants:
@@ -689,9 +691,9 @@ class ContTranslationDataset(Dataset):
         #The data is already normalized        
         #Default file:       
         if in_dist:
-            self.file_data = "data/ContTranslation_64x64_IN.h5"
+            self.file_data = file_path + "/ContTranslation_64x64_IN.h5"
         else:
-            self.file_data = "data/ContTranslation_64x64_OUT.h5"
+            self.file_data = file_path + "/ContTranslation_64x64_OUT.h5"
         
         print(self.file_data)
         self.reader = h5py.File(self.file_data, 'r') 
@@ -821,9 +823,9 @@ class DiscContTranslationDataset(Dataset):
         #The data is already normalized
         
         if in_dist:
-            self.file_data = "data/DiscTranslation_64x64_IN.h5"
+            self.file_data = file_path + "/DiscTranslation_64x64_IN.h5"
         else:
-            self.file_data = "data/DiscTranslation_64x64_OUT.h5"
+            self.file_data = file_path + "/DiscTranslation_64x64_OUT.h5"
         
         if which == "training":
             self.length = training_samples
@@ -953,9 +955,9 @@ class AirfoilDataset(Dataset):
         #We DO NOT normalize the data in this case
         
         if in_dist:
-            self.file_data = "data/Airfoil_128x128_IN.h5"
+            self.file_data = file_path + "/Airfoil_128x128_IN.h5"
         else:
-            self.file_data = "data/Airfoil_128x128_OUT.h5"
+            self.file_data = file_path + "/Airfoil_128x128_OUT.h5"
         
         #in_dist = False
         
@@ -1088,9 +1090,9 @@ class DarcyDataset(Dataset):
     def __init__(self, which="training", nf=0, training_samples=256, insample=True):
         
         if insample:
-            self.file_data = "data/Darcy_64x64_IN.h5"
+            self.file_data = file_path + "/Darcy_64x64_IN.h5"
         else:
-            self.file_data = "data/Darcy_64x64_IN.h5"
+            self.file_data = file_path + "/Darcy_64x64_IN.h5"
         
         
         self.reader = h5py.File(self.file_data, 'r')
