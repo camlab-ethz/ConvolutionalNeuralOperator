@@ -14,9 +14,9 @@ from Problems.CNOBenchmarks import Darcy, Airfoil, DiscContTranslation, ContTran
 test_rel_p = 2
 train_rel_p = 1
 
-def relative_error(pred, y, p, test, axis = (-3,-2,-1)):
+def relative_error(pred, y, p, test, axis = (-2,-1)):
     # NOTE new relative l2 error defined here
-    # NCHW, summing the over the CHW dimension
+    # NCHW, summing the over the HW dimension
 
     errors = ((y - pred)**p).sum(axis)
     norms = (y ** p).sum(axis)
