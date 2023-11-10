@@ -11,17 +11,23 @@ from tqdm import tqdm
 
 from Problems.CNOBenchmarks import Darcy, Airfoil, DiscContTranslation, ContTranslation, AllenCahn, SinFrequency, WaveEquation, ShearLayer
 
-rel_p = 2
+test_rel_p = 2
+train_rel_p = 1
 
-def relative_error(pred, y, p, axis = (-3,-2,-1)):
+def relative_error(pred, y, p, test, axis = (-3,-2,-1)):
     # NOTE new relative l2 error defined here
-    # NCHW, summing the over the HWC dimension
+    # NCHW, summing the over the CHW dimension
 
     errors = ((y - pred)**p).sum(axis)
     norms = (y ** p).sum(axis)
 
     relative_errors = errors / norms
-    return torch.pow(relative_errors, 1/p).mean()
+    if test:
+        return torch.pow(relative_errors, 1/p).mean()
+    else:
+        return relative_errors.mean()
+
+
 
 
 
@@ -174,7 +180,9 @@ for epoch in range(epochs):
                 output_batch[input_batch==1] = 1
             # print(output_pred_batch.shape)
             # raise EOFError
-            loss_f = loss(output_pred_batch, output_batch) / loss(torch.zeros_like(output_batch).to(device), output_batch)
+            # NOTE loss changed here
+            # loss_f = loss(output_pred_batch, output_batch) / loss(torch.zeros_like(output_batch).to(device), output_batch)
+            loss_f = relative_error(output_pred_batch, output_batch, p = train_rel_p, test = False)
 
             loss_f.backward()
             optimizer.step()
@@ -200,7 +208,7 @@ for epoch in range(epochs):
                 
                 # loss_f = torch.mean(abs(output_pred_batch - output_batch)) / torch.mean(abs(output_batch)) * 100
                 # NOTE error changed here
-                loss_f = relative_error(output_pred_batch, output_batch, p = rel_p) * 100
+                loss_f = relative_error(output_pred_batch, output_batch, p = test_rel_p, test = True) * 100
                 test_relative_l2 += loss_f.item()
             test_relative_l2 /= len(val_loader)
 
@@ -215,7 +223,7 @@ for epoch in range(epochs):
 
                     # loss_f = torch.mean(abs(output_pred_batch - output_batch)) / torch.mean(abs(output_batch)) * 100
                     # NOTE error changed here
-                    loss_f = relative_error(output_pred_batch, output_batch, p = rel_p) * 100
+                    loss_f = relative_error(output_pred_batch, output_batch, p = test_rel_p, test = True) * 100
                     train_relative_l2 += loss_f.item()
             train_relative_l2 /= len(train_loader)
             
@@ -239,6 +247,8 @@ for epoch in range(epochs):
             file.write("Best Testing Error: " + str(best_model_testing_error) + "\n")
             file.write("Current Epoch: " + str(epoch) + "\n")
             file.write("Params: " + str(n_params) + "\n")
+            file.write("Loss : " + f'L_{train_rel_p}' + "\n")
+            file.write("Test : " + f'L_{test_rel_p}' + "\n")
         scheduler.step()
 
     if counter>patience:
