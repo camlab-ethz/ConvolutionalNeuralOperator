@@ -18,8 +18,8 @@ def relative_error(pred, y, p, test, axis = (-2,-1)):
     # NOTE new relative l2 error defined here
     # NCHW, summing the over the HW dimension
 
-    errors = ((y - pred)**p).sum(axis)
-    norms = (y ** p).sum(axis)
+    errors = (torch.abs(y - pred)**p).sum(axis)
+    norms = (torch.abs(y) ** p).sum(axis)
 
     relative_errors = errors / norms
     if test:
@@ -27,11 +27,7 @@ def relative_error(pred, y, p, test, axis = (-2,-1)):
     else:
         return relative_errors.mean()
 
-
-
-
-
-
+print(f"train p : {train_rel_p}, test p : {test_rel_p}")
 
 if len(sys.argv) == 2:
     

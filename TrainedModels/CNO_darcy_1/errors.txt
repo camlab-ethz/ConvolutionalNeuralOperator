@@ -1,4 +1,0 @@
-Training Error: 0.0062721530557610095
-Best Testing Error: 0.6248496770858765
-Current Epoch: 999
-Params: 2951249
