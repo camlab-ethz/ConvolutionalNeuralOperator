@@ -1,0 +1,6 @@
+Training Error: 0.00303594493016135
+Best Testing Error: 1.2123027443885803
+Current Epoch: 999
+Params: 2951249
+Loss : L_1
+Test : L_2
