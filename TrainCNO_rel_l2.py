@@ -10,6 +10,7 @@ from tqdm import tqdm
 
 
 from Problems.CNOBenchmarks import Darcy, Airfoil, DiscContTranslation, ContTranslation, AllenCahn, SinFrequency, WaveEquation, ShearLayer
+from Problems.PDEArenaBenchmarks import StandardNavierStokes
 
 test_rel_p = 2
 train_rel_p = 1
@@ -127,6 +128,8 @@ elif which_example == "airfoil":
     example = Airfoil(model_architecture_, device, batch_size, training_samples)
 elif which_example == "darcy":
     example = Darcy(model_architecture_, device, batch_size, training_samples)
+elif which_example == "ns":
+    example = StandardNavierStokes(model_architecture_, device, batch_size, training_samples, size = None)
 else:
     raise ValueError()
     
