@@ -697,7 +697,7 @@ class ContTranslationDataset(Dataset):
         else:
             self.file_data = file_path + "/ContTranslation_64x64_OUT.h5"
         
-        print(self.file_data)
+        # print(self.file_data)
         self.reader = h5py.File(self.file_data, 'r') 
 
         if which == "training":
