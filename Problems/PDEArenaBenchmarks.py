@@ -107,7 +107,7 @@ def default_param(network_properties):
     return network_properties
 
 class StandardNavierStokes:
-    def __init__(self, network_properties, device, batch_size, training_samples, size):
+    def __init__(self, network_properties, device, batch_size, training_samples, size, in_dist = None):
 
         #Must have parameters: ------------------------------------------------        
 

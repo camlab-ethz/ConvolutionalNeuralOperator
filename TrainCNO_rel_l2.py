@@ -106,10 +106,7 @@ if not os.path.isdir(folder):
     print("Generated new folder")
     os.mkdir(folder)
 
-df = pd.DataFrame.from_dict([training_properties]).T
-df.to_csv(folder + '/training_properties.txt', header=False, index=True, mode='w')
-df = pd.DataFrame.from_dict([model_architecture_]).T
-df.to_csv(folder + '/net_architecture.txt', header=False, index=True, mode='w')
+
 
 if which_example == "shear_layer":
     example = ShearLayer(model_architecture_, device, batch_size, training_samples, size = 64)
@@ -132,7 +129,11 @@ elif which_example == "ns":
     example = StandardNavierStokes(model_architecture_, device, batch_size, training_samples, size = None)
 else:
     raise ValueError()
-    
+
+df = pd.DataFrame.from_dict([training_properties]).T
+df.to_csv(folder + '/training_properties.txt', header=False, index=True, mode='w')
+df = pd.DataFrame.from_dict([model_architecture_]).T
+df.to_csv(folder + '/net_architecture.txt', header=False, index=True, mode='w')
 #-----------------------------------Train--------------------------------------
 model = example.model
 n_params = model.print_size()

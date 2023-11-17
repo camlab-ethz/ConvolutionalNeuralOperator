@@ -140,9 +140,11 @@ class ShearLayerDataset(Dataset):
             labels = torch.from_numpy(self.reader['Sample_' + str(index + self.start)]["output"][:]).type(torch.float32).reshape(1, self.s, self.s)
 
         else:
+            if not self.in_dist:
+                s = 128
             
-            inputs = self.reader['Sample_' + str(index + self.start)]["input"][:].reshape(1,1,self.s, self.s)
-            labels = self.reader['Sample_' + str(index + self.start)]["output"][:].reshape(1,1, self.s, self.s)
+            inputs = self.reader['Sample_' + str(index + self.start)]["input"][:].reshape(1,1, s, s)
+            labels = self.reader['Sample_' + str(index + self.start)]["output"][:].reshape(1,1, s, s)
             
             if self.s<128:
                 inputs = downsample(inputs, self.s).reshape(1, self.s, self.s)
