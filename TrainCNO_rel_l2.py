@@ -30,65 +30,49 @@ def relative_error(pred, y, p, test, axis = (-2,-1)):
 
 print(f"train p : {train_rel_p}, test p : {test_rel_p}")
 
-if len(sys.argv) == 2:
     
-    training_properties = {
-        "learning_rate": 0.001, 
-        "weight_decay": 1e-6,
-        "scheduler_step": 10,
-        "scheduler_gamma": 0.98,
-        "epochs": 1000,
-        "batch_size": 16,
-        "exp": 1,                # Do we use L1 or L2 errors? Default: L1
-        "training_samples": 256  # How many training samples?
-    }
-    model_architecture_ = {
-        
-        #Parameters to be chosen with model selection:
-        "N_layers": 3,            # Number of (D) & (U) blocks 
-        "channel_multiplier": 32, # Parameter d_e (how the number of channels changes)
-        "N_res": 4,               # Number of (R) blocks in the middle networs.
-        "N_res_neck" : 6,         # Number of (R) blocks in the BN
-        
-        #Other parameters:
-        "in_size": 64,            # Resolution of the computational grid
-        "retrain": 4,             # Random seed
-        "kernel_size": 3,         # Kernel size.
-        "FourierF": 0,            # Number of Fourier Features in the input channels. Default is 0.
-        "activation": 'cno_lrelu',# cno_lrelu or lrelu
-        
-        #Filter properties:
-        "cutoff_den": 2.0001,     # Cutoff parameter.
-        "lrelu_upsampling": 2,    # Coefficient N_{\sigma}. Default is 2.
-        "half_width_mult": 0.8,   # Coefficient c_h. Default is 1
-        "filter_size": 6,         # 2xfilter_size is the number of taps N_{tap}. Default is 6.
-        "radial_filter": 0,       # Is the filter radially symmetric? Default is 0 - NO.
-    }
-    
-    #   "which_example" can be 
-    
-    #   poisson             : Poisson equation 
-    #   wave_0_5            : Wave equation
-    #   cont_tran           : Smooth Transport
-    #   disc_tran           : Discontinuous Transport
-    #   allen               : Allen-Cahn equation
-    #   shear_layer         : Navier-Stokes equations
-    #   airfoil             : Compressible Euler equations
-    #   darcy               : Darcy Flow
 
-    which_example = sys.argv[1]
-    #which_example = "shear_layer"
-
-    # Save the models here:
-    folder = "TrainedModels/"+"CNO_"+which_example+"_1"
-        
-else:
+model_architecture_ = {
     
-    # Do we use a script to run the code (for cluster):
-    folder = sys.argv[1]
-    training_properties = json.loads(sys.argv[2].replace("\'", "\""))
-    model_architecture_ = json.loads(sys.argv[3].replace("\'", "\""))
-    which_example = sys.argv[4]
+    #Parameters to be chosen with model selection:
+    "N_layers": 3,            # Number of (D) & (U) blocks 
+    "channel_multiplier": 32, # Parameter d_e (how the number of channels changes)
+    "N_res": 4,               # Number of (R) blocks in the middle networs.
+    "N_res_neck" : 6,         # Number of (R) blocks in the BN
+    
+    #Other parameters:
+    "in_size": 64,            # Resolution of the computational grid
+    "retrain": 4,             # Random seed
+    "kernel_size": 3,         # Kernel size.
+    "FourierF": 0,            # Number of Fourier Features in the input channels. Default is 0.
+    "activation": 'cno_lrelu',# cno_lrelu or lrelu
+    
+    #Filter properties:
+    "cutoff_den": 2.0001,     # Cutoff parameter.
+    "lrelu_upsampling": 2,    # Coefficient N_{\sigma}. Default is 2.
+    "half_width_mult": 0.8,   # Coefficient c_h. Default is 1
+    "filter_size": 6,         # 2xfilter_size is the number of taps N_{tap}. Default is 6.
+    "radial_filter": 0,       # Is the filter radially symmetric? Default is 0 - NO.
+}
+
+
+which_example = sys.argv[1]
+
+# Save the models here:
+folder = "TrainedModels/"+"CNO_"+which_example+"_1"
+
+training_properties = {
+    "learning_rate": 0.001, 
+    "weight_decay": 1e-6,
+    "scheduler_step": 10,
+    "scheduler_gamma": 0.98,
+    "epochs": 1000,
+    "batch_size": 16,
+    "exp": 1,                # Do we use L1 or L2 errors? Default: L1
+#    "training_samples": 256  # How many training samples?
+}
+        
+
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 writer = SummaryWriter(log_dir=folder) #usage of TensorBoard
@@ -99,36 +83,47 @@ batch_size = training_properties["batch_size"]
 weight_decay = training_properties["weight_decay"]
 scheduler_step = training_properties["scheduler_step"]
 scheduler_gamma = training_properties["scheduler_gamma"]
-training_samples = training_properties["training_samples"]
-p = training_properties["exp"]
+# training_samples = training_properties["training_samples"]
+# p = training_properties["exp"]
 
-if not os.path.isdir(folder):
-    print("Generated new folder")
-    os.mkdir(folder)
+
 
 
 
 if which_example == "shear_layer":
+    training_samples = training_properties["training_samples"] = 750
     example = ShearLayer(model_architecture_, device, batch_size, training_samples, size = 64)
 elif which_example == "poisson":
+    training_samples = training_properties["training_samples"] = 1024
     example = SinFrequency(model_architecture_, device, batch_size, training_samples)
 elif which_example == "wave_0_5":
+    training_samples = training_properties["training_samples"] = 512
     example = WaveEquation(model_architecture_, device, batch_size, training_samples)
 elif which_example == "allen":
+    training_samples = training_properties["training_samples"] = 256
     example = AllenCahn(model_architecture_, device, batch_size, training_samples)
 elif which_example == "cont_tran":
+    training_samples = training_properties["training_samples"] = 512
     example = ContTranslation(model_architecture_, device, batch_size, training_samples)
 elif which_example == "disc_tran":
+    training_samples = training_properties["training_samples"] = 512
     example = DiscContTranslation(model_architecture_, device, batch_size, training_samples)
 elif which_example == "airfoil":
+    training_samples = training_properties["training_samples"] = 750
     model_architecture_["in_size"] = 128
     example = Airfoil(model_architecture_, device, batch_size, training_samples)
 elif which_example == "darcy":
+    training_samples = training_properties["training_samples"] = 256
     example = Darcy(model_architecture_, device, batch_size, training_samples)
 elif which_example == "ns":
+    training_samples = training_properties["training_samples"] = 768
     example = StandardNavierStokes(model_architecture_, device, batch_size, training_samples, size = None)
 else:
     raise ValueError()
+
+if not os.path.isdir(folder):
+    print("Generated new folder")
+    os.mkdir(folder)
 
 df = pd.DataFrame.from_dict([training_properties]).T
 df.to_csv(folder + '/training_properties.txt', header=False, index=True, mode='w')
@@ -144,10 +139,10 @@ optimizer = torch.optim.AdamW(model.parameters(), lr=learning_rate, weight_decay
 scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=scheduler_step, gamma=scheduler_gamma)
 freq_print = 1
 
-if p == 1:
-    loss = torch.nn.L1Loss()
-elif p == 2:
-    loss = torch.nn.MSELoss()
+# if p == 1:
+#     loss = torch.nn.L1Loss()
+# elif p == 2:
+#     loss = torch.nn.MSELoss()
     
 best_model_testing_error = 1000 #Save the model once it has less than 1000% relative L1 error
 patience = int(0.2 * epochs)    # Early stopping parameter

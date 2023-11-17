@@ -12,3 +12,4 @@ lrelu_upsampling,2
 half_width_mult,0.8
 filter_size,6
 radial_filter,0
+out_size,1
