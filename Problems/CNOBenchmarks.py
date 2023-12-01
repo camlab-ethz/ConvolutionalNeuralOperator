@@ -68,7 +68,7 @@ def default_param(network_properties):
         network_properties["FourierF"] = 0
     
     if "retrain" not in network_properties:
-         network_properties["retrain"] = 4
+        network_properties["retrain"] = 4
     
     if "kernel_size" not in network_properties:
         network_properties["kernel_size"] = 3
@@ -254,18 +254,20 @@ class SinFrequencyDataset(Dataset):
     def __init__(self, which="training", nf=0, training_samples = 1024, s=64, in_dist = True):
         
         
+        # Note: Normalization constants for both ID and OOD should be used from the training set!
+        #Load normalization constants from the TRAINING set:
+        file_data_train = "data/PoissonData_64x64_IN.h5"
+        self.reader = h5py.File(file_data_train, 'r')
+        self.min_data = self.reader['min_inp'][()]
+        self.max_data = self.reader['max_inp'][()]
+        self.min_model = self.reader['min_out'][()]
+        self.max_model = self.reader['max_out'][()]
+        
         #The file:
         if in_dist:
             self.file_data = "data/PoissonData_64x64_IN.h5"
         else:
             self.file_data = "data/PoissonData_64x64_OUT.h5"
-
-        #Load normalization constants from the TRAINING set:
-        self.reader = h5py.File(self.file_data, 'r')
-        self.min_data = self.reader['min_inp'][()]
-        self.max_data = self.reader['max_inp'][()]
-        self.min_model = self.reader['min_out'][()]
-        self.max_model = self.reader['max_out'][()]
 
         self.s = s #Sampling rate
 
@@ -400,19 +402,20 @@ class SinFrequency:
 class WaveEquationDataset(Dataset):
     def __init__(self, which="training", nf=0, training_samples = 512, t = 5, s = 64, in_dist = True):
         
+        # Note: Normalization constants for both ID and OOD should be used from the training set!
+        #Load normalization constants from the TRAINING set:
+        file_data_train = "data/WaveData_64x64_IN.h5"
+        self.reader = h5py.File(file_data_train, 'r')
+        self.min_data = self.reader['min_u0'][()]
+        self.max_data = self.reader['max_u0'][()]
+        self.min_model = self.reader['min_u'][()]
+        self.max_model = self.reader['max_u'][()]
+        
         #Default file:       
         if in_dist:
             self.file_data = "data/WaveData_64x64_IN.h5"
         else:
             self.file_data = "data/WaveData_64x64_OUT.h5"
-
-        self.reader = h5py.File(self.file_data, 'r')
-        
-        #Load normaliation constants:
-        self.min_data = self.reader['min_u0'][()]
-        self.max_data = self.reader['max_u0'][()]
-        self.min_model = self.reader['min_u'][()]
-        self.max_model = self.reader['max_u'][()]
         
         #What time? DEFAULT : t = 5
         self.t = t
@@ -547,18 +550,21 @@ class WaveEquation:
 class AllenCahnDataset(Dataset):
     def __init__(self, which="training", nf = 0, training_samples = 256, s=64, in_dist = True):
 
+        # Note: Normalization constants for both ID and OOD should be used from the training set!
+        # Load normalization constants from the TRAINING set:
+        file_data_train = "data/AllenCahn_64x64_IN.h5"
+        self.reader = h5py.File(file_data_train, 'r')
+        self.min_data = self.reader['min_u0'][()]
+        self.max_data = self.reader['max_u0'][()]
+        self.min_model = self.reader['min_u'][()]
+        self.max_model = self.reader['max_u'][()]
+        
         #Default file:
         if in_dist:
             self.file_data = "data/AllenCahn_64x64_IN.h5"
         else:            
             self.file_data = "data/AllenCahn_64x64_OUT.h5"
         self.reader = h5py.File(self.file_data, 'r')
-        
-        #Load normalization constants:
-        self.min_data = self.reader['min_u0'][()]
-        self.max_data = self.reader['max_u0'][()]
-        self.min_model = self.reader['min_u'][()]
-        self.max_model = self.reader['max_u'][()]
                 
         if which == "training":
             self.length = training_samples
@@ -693,7 +699,6 @@ class ContTranslationDataset(Dataset):
         else:
             self.file_data = "data/ContTranslation_64x64_OUT.h5"
         
-        print(self.file_data)
         self.reader = h5py.File(self.file_data, 'r') 
 
         if which == "training":
@@ -1087,18 +1092,21 @@ class Airfoil:
 class DarcyDataset(Dataset):
     def __init__(self, which="training", nf=0, training_samples=256, insample=True):
         
+        # Note: Normalization constants for both ID and OOD should be used from the training set!
+        # Load normalization constants from the TRAINING set:
+        file_data_train = "data/Darcy_64x64_IN.h5"
+        self.reader = h5py.File(file_data_train, 'r')
+        self.min_data = self.reader['min_u0'][()]
+        self.max_data = self.reader['max_u0'][()]
+        self.min_model = self.reader['min_u'][()]
+        self.max_model = self.reader['max_u'][()]
+        
         if insample:
             self.file_data = "data/Darcy_64x64_IN.h5"
         else:
-            self.file_data = "data/Darcy_64x64_IN.h5"
-        
-        
+            self.file_data = "data/Darcy_64x64_OUT.h5"
+    
         self.reader = h5py.File(self.file_data, 'r')
-
-        self.min_data = self.reader['min_inp'][()]
-        self.max_data = self.reader['max_inp'][()]
-        self.min_model = self.reader['min_out'][()]
-        self.max_model = self.reader['max_out'][()]
                 
         if which == "training":
             self.length = training_samples
