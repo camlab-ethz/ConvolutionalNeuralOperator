@@ -19,7 +19,7 @@ from random import randint
 
 #------------------------------------------------------------------------------------------------------------------------------------------------
 
-def load_data(folder, which_model, device, which_example, in_size = 64, batch_size = 32, training_samples = 1, in_dist = True):
+def load_data(folder, which_model, device, which_example, in_size = 64, batch_size = 1, training_samples = 1, in_dist = True):
     
     if which_model == "CNO":
         from Problems.CNOBenchmarks import Darcy, Airfoil, DiscContTranslation, ContTranslation, AllenCahn, SinFrequency, WaveEquation, ShearLayer
@@ -35,7 +35,7 @@ def load_data(folder, which_model, device, which_example, in_size = 64, batch_si
             model_architecture_[key] = int(value)
     model_architecture_["in_size"] = in_size
     
-    if which_model == "CNO" or which_model == "UNET":
+    if which_model == "CNO":
         if which_example == "shear_layer":
             example = ShearLayer(model_architecture_, device, batch_size, training_samples, in_dist = in_dist)
         elif which_example == "poisson":
@@ -57,7 +57,6 @@ def load_data(folder, which_model, device, which_example, in_size = 64, batch_si
             raise ValueError()
     
     elif which_model == "FNO":
-        
         if which_example == "shear_layer":
             example = ShearLayer(model_architecture_, device, batch_size, training_samples, in_dist = in_dist)
         elif which_example == "poisson":
@@ -95,12 +94,13 @@ def error_distribution(which_model, model, testing_loader, p, N, device, which =
             if i>=N:
                 break
                 
-            if which_model == "CNO" or which_model == "UNET":
+            if which_model == "CNO":
                 
                 inputs = inputs.to(device)
                 outputs = outputs.to(device)
                 prediction = model(inputs)
 
+                # Mask the output for the Airfoil experiment
                 if which == "airfoil":
                     outputs[inputs==1] = 1
                     prediction[inputs==1] = 1
@@ -112,6 +112,7 @@ def error_distribution(which_model, model, testing_loader, p, N, device, which =
                 outputs = outputs.to(model.device)
                 prediction = model(inputs)
                 
+                # Mask the output for the Airfoil experiment
                 if which == "airfoil":
                     outputs[inputs==1] = 1
                     prediction[inputs==1] = 1
@@ -123,8 +124,6 @@ def error_distribution(which_model, model, testing_loader, p, N, device, which =
             
             E_diss[cnt: cnt + batch] = err.detach().cpu().numpy()
             cnt+=batch
-    
-            
     
     return E_diss
 
@@ -284,24 +283,19 @@ def plot_samples_different_models(which_models, data_loaders, models, p, n, whic
         
         with torch.no_grad():
             for i, (inputs, outputs) in enumerate(data_loader):
-            
-                #print(i, n)
-                #print(which_model, "Which")
-
+                
                 if i == n:
 
                     inputs = inputs.to(model.device)
                     outputs = outputs.to(model.device)
-                    
                     prediction = model(inputs)
-                
                 
                     if which == "airfoil":
                         outputs[inputs==1] = 1
                         prediction[inputs==1] = 1
                         inputs[inputs==1] = 1
                 
-                    if which_model == "CNO"  or which_model == "UNET":
+                    if which_model == "CNO":
                         preds.append(prediction[0,0,:, :].detach().numpy())
                         
                         if w == 0:
@@ -311,7 +305,6 @@ def plot_samples_different_models(which_models, data_loaders, models, p, n, whic
                     elif which_model == "FNO":
                         preds.append(prediction[0,:, :,0].detach().numpy())
 
-                        
                         if w == 0:
                             inp = inputs[0,:, :,0].detach().numpy()
                             out = outputs[0,:, :,0].detach().numpy()
@@ -322,7 +315,7 @@ def plot_samples_different_models(which_models, data_loaders, models, p, n, whic
 
     for m in range(M+2):
         axes[m].grid(True, which="both", ls=":")
-   
+    
     fontsize = 16
     
     
@@ -386,76 +379,56 @@ else:
 
 # Model folders
 if which == "poisson":
-    folder_UNET = "SELECTED_MODELS/Best_poisson_UNet"
     folder_CNO = "SELECTED_MODELS/Best_poisson_CNO"
-    folder_FNO = "SELECTED_MODELS/Best_poisson_FNO"
-
-    
+    folder_FNO = "SELECTED_MODELS/Best_poisson_FNO"    
     N = 256
 
 elif which == "wave_0_5":
-    folder_UNET = "SELECTED_MODELS/Best_wave_UNet"
     folder_CNO = "SELECTED_MODELS/Best_wave_CNO" 
     folder_FNO = "SELECTED_MODELS/Best_wave_FNO" 
-
     N = 256
 
 elif which == "allen":
-    folder_UNET = "SELECTED_MODELS/Best_allen_cahn_UNet" 
     folder_CNO = "SELECTED_MODELS/Best_allen_cahn_CNO" 
     folder_FNO = "SELECTED_MODELS/Best_allen_cahn_FNO" 
-
     N = 128
     
 elif which == "shear_layer":
-    folder_UNET = "SELECTED_MODELS/Best_shear_layer_UNet"
     folder_CNO = "SELECTED_MODELS/Best_shear_layer_CNO"
     folder_FNO = "SELECTED_MODELS/Best_shear_layer_FNO"
-
     N = 128
 
 
 elif which == "cont_tran":
-    folder_UNET = "SELECTED_MODELS/Best_cont_t_UNet"
     folder_CNO = "SELECTED_MODELS/Best_cont_t_CNO"
     folder_FNO = "SELECTED_MODELS/Best_cont_t_FNO"
-
     N = 256
 
 elif which == "disc_tran":
-    folder_UNET = "SELECTED_MODELS/Best_discont_t_UNet" 
     folder_CNO = "SELECTED_MODELS/Best_discont_t_CNO" 
     folder_FNO = "SELECTED_MODELS/Best_discont_t_FNO" 
-
     N = 256
 
 elif which == "airfoil":
-    folder_UNET = "SELECTED_MODELS/Best_airfoil_UNet"  
     folder_CNO = "SELECTED_MODELS/Best_airfoil_CNO"  
     folder_FNO = "SELECTED_MODELS/Best_airfoil_FNO"  
-
     N = 128
 
 if dist:
     modelFNO = torch.load(folder_FNO + "/model.pkl", map_location=torch.device(device))
     modelCNO = torch.load(folder_CNO + "/model.pkl", map_location=torch.device(device))
-    modelUNET = torch.load(folder_UNET + "/model.pkl", map_location=torch.device(device)) 
     
     modelFNO.device = device
     modelCNO.device = device
-    modelUNET.device = device
     
     data_loader_FNO = load_data(folder_FNO, "FNO", device, which, in_dist = in_dist)
     data_loader_CNO = load_data(folder_CNO, "CNO", device, which, in_dist = in_dist)
-    data_loader_UNET = data_loader_CNO
     
     data_loader_FNO.num_workers = 16
     data_loader_CNO.num_workers = 16
-    data_loader_UNET.num_workers = 16
     
     E_FNO = error_distribution(which_model = "FNO", model = modelFNO, testing_loader = data_loader_FNO, p = 1, N = N, device = device, which = which)
     E_CNO = error_distribution(which_model = "CNO", model = modelCNO, testing_loader = data_loader_CNO, p = 1, N = N, device = device, which = which)
-    E_UNET = error_distribution(which_model = "UNET", model = modelUNET, testing_loader = data_loader_CNO, p = 1, N = N, device = device, which = which)    
     
     if which == "airfoil":
         size = 128
@@ -468,7 +441,6 @@ if dist:
         dist_name = "dist.h5"
         write_in_file_distribution(folder_CNO, dist_name, E_CNO)
         write_in_file_distribution(folder_FNO, dist_name, E_FNO)
-        write_in_file_distribution(folder_UNET, dist_name, E_UNET)
     
     #Write avg. spectra?
     write_spectra = False
@@ -478,16 +450,12 @@ if dist:
         avg, avg_inp, avg_out = avg_spectra("CNO", modelCNO, data_loader_CNO, device, in_size = size)
         write_in_file_spectra(folder_CNO, spectra_name, avg, avg_inp, avg_out)
         
-        avg, avg_inp, avg_out = avg_spectra("CNN", modelUNET, data_loader_UNET, device, in_size = size)
-        write_in_file_spectra(folder_UNET, spectra_name, avg, avg_inp, avg_out)
-        
         avg, avg_inp, avg_out = avg_spectra("FNO", modelFNO, data_loader_FNO, device, in_size = size)
         write_in_file_spectra(folder_FNO,spectra_name, avg, avg_inp, avg_out)
         
         dist_name = "dist.h5"
         write_in_file_distribution(folder_CNO, dist_name, E_CNO)
         write_in_file_distribution(folder_FNO, dist_name, E_FNO)
-        write_in_file_distribution(folder_UNET, dist_name, E_UNET)
     
     print("-------------")
     print("Experiment: ", which)
@@ -495,7 +463,6 @@ if dist:
     print("")
     print("CNO error:", np.median(E_CNO))
     print("FNO error:", np.median(E_FNO))
-    print("UNet error:", np.median(E_UNET))
     print("-------------")
 
 
@@ -503,17 +470,14 @@ elif plot:
         
     modelFNO = torch.load(folder_FNO + "/model.pkl", map_location=torch.device(device))
     modelCNO = torch.load(folder_CNO + "/model.pkl", map_location=torch.device(device))
-    modelUNET = torch.load(folder_UNET + "/model.pkl", map_location=torch.device(device)) 
     
     modelFNO.device = device
     modelCNO.device = device
-    modelUNET.device = device
     
     in_dist = False
     
     data_loader_FNO = load_data(folder_FNO, "FNO", device, which, batch_size = 1, in_dist = in_dist)
     data_loader_CNO = load_data(folder_CNO, "CNO", device, which, batch_size = 1, in_dist = in_dist)
-    data_loader_UNET = data_loader_CNO
     
     random.seed()
     n = randint(0,N)
@@ -523,8 +487,8 @@ elif plot:
 
     random.seed()
     n = randint(0,N)
-    plot_samples_different_models(["CNO", "FNO", "UNET"], 
-                                [data_loader_CNO, data_loader_FNO, data_loader_UNET], 
-                                [modelCNO, modelFNO, modelUNET], 
+    plot_samples_different_models(["CNO", "FNO"], 
+                                [data_loader_CNO, data_loader_FNO], 
+                                [modelCNO, modelFNO], 
                                 1, n, which = which)
     
