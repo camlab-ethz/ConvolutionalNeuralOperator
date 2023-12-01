@@ -117,10 +117,10 @@ If a slurm-base cluster is available, set sbatch=True and cluster="true" in the 
 
 ## Error Computations
 
-To compute the relative L1 median errors of the CNO, FNO and UNet models, one scould run the scripts "ErrorDistribution.py".
+To compute the relative L1 median errors of the CNO and FNO models, one scould run the scripts "ErrorDistribution.py".
 
 In the "ErrorDistribution.py" file, one should select the variable "which", corresponding to a benchmark experiment. 
 
-In the same file, one can set a variable "plot = True" to plot a random sample and predictions for the CNO, FNO and UNet models.
-One can also set "plot = False" to compute the errors for the CNO, FNO and UNet models. By selecting "in_dist = False", one obtains out-of-distribution test errors. 
+In the same file, one can set a variable "plot = True" to plot a random sample and predictions for the CNO and FNO models.
+One can also set "plot = False" to compute the errors for the CNO and FNO models. By selecting "in_dist = False", one obtains out-of-distribution test errors. 
 
