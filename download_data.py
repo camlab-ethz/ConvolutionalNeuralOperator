@@ -8,6 +8,6 @@ folder_name = "./"
 fnames = ["data.zip"]
 for fid, fname in enumerate(fnames):
     print('Downloading file {fname} ({fid+1}/{len(fnames)}):')
-    url = "https://zenodo.org/record/10058382/files/" + fname
+    url = "https://zenodo.org/record/10406879/files/" + fname
     cmd = f"wget --directory-prefix {folder_name} {url}"
     os.system(cmd)
