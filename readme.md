@@ -2,6 +2,8 @@
 
 This repository is the official implementation of the paper **Convolutional Neural Operators for robust and accurate learning of PDEs** (see https://arxiv.org/pdf/2302.01178.pdf). The paper is presented at NeurIPS 2023.
 
+**Representative PDE Benchmarks (RPB) are available at** https://zenodo.org/records/10406879 !
+
 **Read our blog at** https://link.medium.com/Mht8Th5OhFb !
 
 ![alt text](/figures/diag.png)
@@ -53,7 +55,7 @@ Their official github page is https://github.com/NVlabs/stylegan3.
 
 
 ## Source Data
-We cover instances of the Poisson, Wave, Navier-Stokes, Allen-Cahn, Transport and Compressible Euler equations and Darcy flow. Data can be downloaded from https://zenodo.org/records/10406879 (~2.8GB).
+We cover instances of the Poisson, Wave, Navier-Stokes, Allen-Cahn, Transport and Compressible Euler equations and Darcy flow. Data can be downloaded from https://zenodo.org/records/10406879 (~2.4GB).
 
 Alternatively, run the script `download_data.py` which downloads all required data into the appropriate folder (it requires 'wget' to be installed on your system).
 
