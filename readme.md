@@ -1,6 +1,6 @@
 # Convolutional Neural Operators for robust and accurate learning of PDEs
 
-This repository is the official implementation of the paper **Convolutional Neural Operators for robust and accurate learning of PDEs** (see https://arxiv.org/pdf/2302.01178.pdf). The paper is presented at NeurIPS 2023.
+This repository is the official implementation of the paper **Convolutional Neural Operators for robust and accurate learning of PDEs** (see https://arxiv.org/pdf/2302.01178.pdf). The paper was presented at **NeurIPS 2023**.
 
 **Representative PDE Benchmarks (RPB) are available at** https://zenodo.org/records/10406879 !
 
