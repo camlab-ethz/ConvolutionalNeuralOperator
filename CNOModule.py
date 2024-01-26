@@ -13,7 +13,7 @@ import torch.nn as nn
 
 import torch
 #from debug_tools import *
-from training.filtered_networks import LReLu, LReLu_regular #Either "filtered LReLU" or regular LReLu
+from training.filtered_networks import LReLu, LReLu_regular, LReLu_torch #Either "filtered LReLU" or regular LReLu
 from debug_tools import format_tensor_size
 
 #------------------------------------------------------------------------------
@@ -86,6 +86,13 @@ class CNOBlock(nn.Module):
                                      lrelu_upsampling      = lrelu_upsampling,
                                      is_critically_sampled = self.citically_sampled,
                                      use_radial_filters    = False)
+        elif activation == "cno_lrelu_torch":
+            self.activation = LReLu_torch(in_channels           = self.out_channels, #In _channels is not used in these settings
+                                            out_channels          = self.out_channels,                   
+                                            in_size               = self.in_size,                       
+                                            out_size              = self.out_size,                       
+                                            in_sampling_rate      = self.in_size,               
+                                            out_sampling_rate     = self.out_size)
         elif activation == "lrelu":
             self.activation  = LReLu_regular(in_channels           = self.in_channels, #In _channels is not used in these settings
                                              out_channels          = self.out_channels,                   
@@ -218,6 +225,14 @@ class ResidualBlock(nn.Module):
                                      lrelu_upsampling      = lrelu_upsampling,
                                      is_critically_sampled = self.citically_sampled,
                                      use_radial_filters    = False)
+        
+        elif activation == "cno_lrelu_torch":
+            self.activation = LReLu_torch(in_channels           = self.channels, #In _channels is not used in these settings
+                                            out_channels          = self.channels,                   
+                                            in_size               = self.size,                       
+                                            out_size              = self.size,                       
+                                            in_sampling_rate      = self.size,               
+                                            out_sampling_rate     = self.size)
         elif activation == "lrelu":
 
             self.activation = LReLu_regular(in_channels           = self.channels, #In _channels is not used in these settings
