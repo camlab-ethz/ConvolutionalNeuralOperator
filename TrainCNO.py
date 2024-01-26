@@ -38,7 +38,7 @@ if len(sys.argv) == 2:
         "retrain": 4,             # Random seed
         "kernel_size": 3,         # Kernel size.
         "FourierF": 0,            # Number of Fourier Features in the input channels. Default is 0.
-        "activation": 'cno_lrelu',# cno_lrelu or lrelu
+        "activation": 'cno_lrelu',# cno_lrelu or cno_lrelu_torch or lrelu or 
         
         #Filter properties:
         "cutoff_den": 2.0001,     # Cutoff parameter.
