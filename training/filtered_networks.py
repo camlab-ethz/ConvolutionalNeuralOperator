@@ -468,3 +468,48 @@ class LReLu_regular(torch.nn.Module):
             return nn.AvgPool2d(4, stride=4, padding=1)(self.activation(x))
         else:
             return nn.functional.interpolate(self.activation(x), size=self.out_size)
+
+#------------------------------------------------------------------------------------------------
+
+# This function is slower than the cno_lrelu, but it is easier to set it up
+
+class LReLu_torch(torch.nn.Module):
+    def __init__(self,
+        in_channels,                    # Number of input channels.
+        out_channels,                   # Number of output channels.
+        in_size,                        # Input spatial size: int or [width, height].
+        out_size,                       # Output spatial size: int or [width, height].
+        in_sampling_rate,               # Input sampling rate (s).
+        out_sampling_rate,              # Output sampling rate (s).
+    ):
+        super().__init__()
+        
+        
+        self.activation = nn.LeakyReLU() 
+        
+        self.in_channels = in_channels
+        self.out_channels = out_channels
+        
+        assert in_channels == out_channels
+        
+        self.in_size = in_size
+        self.out_size = out_size
+        self.in_sampling_rate = in_sampling_rate
+        self.out_sampling_rate = out_sampling_rate
+
+        self.bias = torch.nn.Parameter(torch.zeros([self.out_channels]))
+        
+
+        #------------------------------------------------------------------------------------------------
+
+    def forward(self, x):
+        
+        x = nn.functional.interpolate(x, size = 2*self.in_size,mode='bicubic', antialias = True)
+        x = self.activation(x)
+        x = nn.functional.interpolate(x, size = self.in_size,mode='bicubic', antialias = True)
+        x = nn.functional.interpolate(x, size = self.out_size,mode='bicubic', antialias = True)
+
+        x = x.permute(0,2,3,1)
+        x = torch.add(x, torch.broadcast_to(self.bias, x.shape))
+        x = x.permute(0,3,1,2)
+        return x
