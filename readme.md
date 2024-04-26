@@ -53,7 +53,7 @@ Their official github page is https://github.com/NVlabs/stylegan3.
 
 **Note: To train or evaluate models other than CNO, please move the required files/scripts/modules from the folder _OtherModels to the main folder.**
 
-## CNO1d (pure pytorch version)
+## CNO1d (vanilla pytorch version)
 
 We recently added 1d implementation of CNO. The CNO1d code has been modified from a tutorial featured in the ETH Zurich course "AI in the Sciences and Engineering." Git page for this course: https://github.com/bogdanraonic3/AI_Science_Engineering 
 
