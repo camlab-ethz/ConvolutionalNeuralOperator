@@ -39,15 +39,19 @@ The code is based on python 3 (version 3.7) and the packages required can be ins
 
 1. **Training a CNO is slow on CPU. We suggest the training to be run on a GPU!**
 
-2. To run the CNO code, one needs the CUDA toolkit 11.1 or later. This toolkit is **NOT** the same as cudatoolkit from Conda. Please visit the page https://developer.nvidia.com/cuda-toolkit for installation!
+2. To run the original CNO code, one needs the CUDA toolkit 11.1 or later. This toolkit is **NOT** the same as cudatoolkit from Conda. Please visit the page https://developer.nvidia.com/cuda-toolkit for installation!
+
+3. **Vanilla CNO** versions do not require special CUDA toolkit installation.
 	
-3.	To run the CNO code on Linux, one needs GCC 7 or later compiler.
+4.	To run the CNO code on Linux, one needs GCC 7 or later compiler.
 	To run the CNO code on Windows, one needs Visual Studio compiler.
 
-4.	To run the CNO code, one needs ninja build system.
+5.	To run the CNO code, one needs ninja build system.
 
-Implementation of the filters is borrowed from the paper *Alias-Free Generative Adversarial Networks (StyleGAN3)*. 
-Their official github page is https://github.com/NVlabs/stylegan3.
+Implementation of the filters from the original CNO code is borrowed from the paper *Alias-Free Generative Adversarial Networks (StyleGAN3)*. 
+Their official github page is https://github.com/NVlabs/stylegan3. 
+
+Vanilla CNO versions use antialias interpolation methods from the pytorch library.
 
 <br />
 
