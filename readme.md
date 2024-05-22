@@ -35,7 +35,9 @@ The code is based on python 3 (version 3.7) and the packages required can be ins
 	python3 -m pip install -r requirements.txt
 
 
-#### Note:
+### Note:
+
+### The original CNO code can be found in the folder _CNO2d_original_version_!
 
 1. **Training a CNO is slow on CPU. We suggest the training to be run on a GPU!**
 
@@ -48,14 +50,14 @@ The code is based on python 3 (version 3.7) and the packages required can be ins
 
 5.	To run the CNO code, one needs ninja build system.
 
-Implementation of the filters from the original CNO code is borrowed from the paper *Alias-Free Generative Adversarial Networks (StyleGAN3)*. 
+Implementation of the filters from the original CNO (_CNO2d_original_version_) code is borrowed from the paper *Alias-Free Generative Adversarial Networks (StyleGAN3)*. 
 Their official github page is https://github.com/NVlabs/stylegan3. 
 
 Vanilla CNO versions use antialias interpolation methods from the pytorch library.
 
 <br />
 
-**Note: To train or evaluate models other than CNO, please move the required files/scripts/modules from the folder _OtherModels to the main folder.**
+**Note: To train or evaluate models other than CNO, please move the required files/scripts/modules from the folder __OtherModels_ to the _CNO2d_original_version_ folder.**
 
 ## CNO1d and CNO2d (vanilla pytorch version)
 
@@ -77,7 +79,7 @@ Alternatively, run the script `download_data.py` which downloads all required da
 The "data.zip" needs to be unzipped.
 
 ## Models Training
-Each of the baselines described in the paper can be trained by running the python scripts 
+Each of the baselines described in the paper can be trained by running the python scripts
 
 
 	Train**.py
@@ -89,6 +91,8 @@ where ** holds for:
 	- FNO:    FNO model
 	- DON:    DeepONet model
 	...
+
+#### * Note that the models other than vanilla CNO ones must be ran from the folder _CNO2d_original_version_.
 
 The models' hyperparameter can be specified in the corresponding python scripts as well.
 
@@ -102,10 +106,7 @@ To select the benchmark experiment for FNO and CNO to be trained, the variable "
     shear_layer         : Navier-Stokes equations
     airfoil             : Compressible Euler equations
     darcy               : Darcy Flow
-
-#### Note
-
-
+    
 
 The following files correspond to:
 
@@ -132,7 +133,7 @@ If a slurm-base cluster is available, set sbatch=True and cluster="true" in the 
 
 ## Error Computations
 
-To compute the relative L1 median errors of the CNO and FNO models, one scould run the scripts "ErrorDistribution.py".
+To compute the relative L1 median errors of the CNO and FNO models, one scould run the scripts "ErrorDistribution.py". The script is located in the folder _CNO2d_original_version_.
 
 In the "ErrorDistribution.py" file, one should select the variable "which", corresponding to a benchmark experiment. 
 
