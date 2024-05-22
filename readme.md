@@ -57,13 +57,13 @@ Vanilla CNO versions use antialias interpolation methods from the pytorch librar
 
 **Note: To train or evaluate models other than CNO, please move the required files/scripts/modules from the folder _OtherModels to the main folder.**
 
-## CNO1d (vanilla pytorch version)
+## CNO1d and CNO2d (vanilla pytorch version)
 
-We recently added 1d implementation of CNO. The model is termed as "vanilla CNO" (as the interpolation filters cannot be manually designed). The vanilla CNO1d code has been modified from a tutorial featured in the ETH Zurich course "AI in the Sciences and Engineering." Git page for this course: https://github.com/bogdanraonic3/AI_Science_Engineering 
+We recently added 1d and 2d _vanilla_ implementation of CNO. The models are termed as "vanilla CNO" as the interpolation filters cannot be manually designed. The vanilla CNO1d and CNO2d codes have been modified from a tutorial featured in the ETH Zurich course "AI in the Sciences and Engineering." Git page for this course: https://github.com/bogdanraonic3/AI_Science_Engineering 
 
-The code does not utilize the CUDA kernel, making it significantly simpler to configure compared to the standard CNO. For up/downsampling, the antialias interpolation functions from the torch library are utilized, limiting the ability to design your own low-pass filters at present. 
+The codes do not utilize the CUDA kernel, making it significantly simpler to configure compared to the standard CNO. For up/downsampling, the antialias interpolation functions from the torch library are utilized, limiting the ability to design your own low-pass filters at present. 
 
-While acknowledging this suboptimal setup, the performance of the vanilla CNO1d remains commendable. 
+While acknowledging this suboptimal setup, the performance of the vanilla CNO1d and CNO2d remain commendable. 
 
 ## Source Data
 We cover instances of the Poisson, Wave, Navier-Stokes, Allen-Cahn, Transport and Compressible Euler equations and Darcy flow. Data can be downloaded from https://zenodo.org/records/10406879 (~2.4GB).
