@@ -108,7 +108,7 @@ To select the benchmark experiment for FNO and CNO to be trained, the variable "
     darcy               : Darcy Flow
     
 
-The following files correspond to:
+The following files in _CNO2d_original_version_ correspond to:
 
 	Problems/CNOBenchmark.py :            Dataloader for CNO model
 	_OtherBenchamrks/FNOBenchmark.py :    Dataloader for FNO model
