@@ -35,8 +35,10 @@ We assess the test errors of the CNO and other baselines at different testing re
     - All the instructions for these versions can be found in the _readme.md_ files in the folders
     - The models are termed as "vanilla CNO" as the interpolation filters cannot be manually designed
     - The codes do not utilize the CUDA kernel, making them simple to configure
- 
-3. **Codes for the other baselines are located in the folder [_OtherModels](https://github.com/camlab-ethz/ConvolutionalNeuralOperator/tree/main/_OtherModels)**
+
+3. **Codes for Time-Dependent CNO2d** - [CNO2d_time_dependent_pde](https://github.com/camlab-ethz/ConvolutionalNeuralOperator/tree/main/CNO2d_time_dependent_pde) - **COMING SOON**
+
+4. **Codes for the other baselines are located in the folder [_OtherModels](https://github.com/camlab-ethz/ConvolutionalNeuralOperator/tree/main/_OtherModels)**
 
 
 ## Datasets
