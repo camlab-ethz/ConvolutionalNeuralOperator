@@ -10,6 +10,8 @@
 
 Implementation of the filters from the original CNO code is borrowed from the paper *Alias-Free Generative Adversarial Networks (StyleGAN3)* -- see their [github page](https://github.com/NVlabs/stylegan3).
 
+<br />
+
 ## Training
 The CNO models can be trained by running the python scripts
 
@@ -25,9 +27,12 @@ Important hyperparameters related to the CNO architecture are:
 | N_res_neck |  number of residual blocks in the bottleneck |
 | in_size |  resolution of the computational grid |
 
-Other parameters may be kept unchanged,
+Other parameters should be kept unchanged.
 
-To select the benchmark experiment for CNO to be trained, the variable *which_example"*in a corresponding script TrainCNO.py should have one of the following values:
+<br />
+
+
+To select the benchmark experiment for CNO to be trained, the variable *which_example* in a corresponding script TrainCNO.py should have one of the following values:
 
 | which_example | PDE |
 | ------ | ------ |
@@ -40,11 +45,17 @@ To select the benchmark experiment for CNO to be trained, the variable *which_ex
 | airfoil | Compressible Euler equations |
 | darcy | Darcy Flow |
 
+## Running your own experiment
+
 The file 
 
-	Problems/CNOBenchmark.py
+	Problems/CNOBenchmarks.py
 
-corresponds to the dataloader for CNO model
+corresponds to the dataloaders for the CNO model.
+
+- To run your own experiment, you should write your own class in the CNOBenchmarks.py.
+- Once the class is coded, you should load your data in the TrainCNO.py file.
+
 
 ## Hyperparameters Grid/Random Search
 Cross validation for each model can be run with:
@@ -53,16 +64,14 @@ Cross validation for each model can be run with:
 
 The hyperparameters of the best-performing models reported in the Supplementary Materials are obtained in this way.
 
-#### Note
-If a slurm-base cluster is available, set sbatch=True and cluster="true" in the scripts. We ran the codes on a local cluster (Euler cluster).
+- If a slurm-base cluster is available, set sbatch=True and cluster="true" in the scripts.
+- We ran the codes on a local cluster (Euler cluster).**
 
 ## Error Computations
 
 To compute the relative L1 median errors of the CNO and FNO models, one scould run the scripts "ErrorDistribution.py".
 
-In the "ErrorDistribution.py" file, one should select the variable "which", corresponding to a benchmark experiment.
-
-In the same file, one can set a variable "plot = True" to plot a random sample and predictions for the **CNO and FNO models**.
-
-One can also set "plot = False" to compute the errors for the CNO and FNO models. By selecting "in_dist = False", one obtains out-of-distribution test errors. 
+- In the "ErrorDistribution.py" file, one should select the variable "which", corresponding to a benchmark experiment (see above).
+- In the same file, one can set a variable "plot = True" to plot a random sample and predictions for the **CNO and FNO models**.
+- One can also set "plot = False" to compute the errors for the CNO and FNO models. By selecting "in_dist = False", one obtains out-of-distribution test errors. 
 
