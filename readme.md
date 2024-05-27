@@ -1,14 +1,11 @@
 # Convolutional Neural Operators for robust and accurate learning of PDEs
 
-This repository is the official implementation of the paper **Convolutional Neural Operators for robust and accurate learning of PDEs** (see https://arxiv.org/pdf/2302.01178.pdf). The paper was presented at **NeurIPS 2023**.
+- This repository is the official implementation of the paper **Convolutional Neural Operators for robust and accurate learning of PDEs** (see https://arxiv.org/pdf/2302.01178.pdf)
+- The paper was presented at **NeurIPS 2023**
+- **Representative PDE Benchmarks (RPB) are available at** https://zenodo.org/records/10406879
+- **Read our blog at** https://link.medium.com/Mht8Th5OhFb
 
-**Representative PDE Benchmarks (RPB) are available at** https://zenodo.org/records/10406879 !
-
-**Read our blog at** https://link.medium.com/Mht8Th5OhFb !
-
-![alt text](/figures/diag.png)
-
-The CNO is tested on a novel set of benchmarks, termed as Representative PDE Benchmarks (RPB), that span across a variety of PDEs ranging from linear elliptic and hyperbolic to nonlinear parabolic and hyperbolic PDEs, with possibly multiscale solutions. The CNO is either on-par or outperformed the tested baselines on all the benchmarks, both when testing in-distribution as well as in out-of-distribution testing.
+The CNO is tested on a novel set of benchmarks, termed as Representative PDE Benchmarks (RPB). The CNO is either on-par or outperformed the tested baselines on all the benchmarks, both when testing in-distribution as well as in out-of-distribution testing.
 
 <p align="center">
  <img src="/figures/table.png" width="750"/>
@@ -28,46 +25,21 @@ We assess the test errors of the CNO and other baselines at different testing re
 </p>
 <br />
 
+## Code Instructions:
 
-## Requirements
-The code is based on python 3 (version 3.7) and the packages required can be installed with
+1. **The original CNO code from NeurIPS 2023 is located in the folder [CNO2d_original_version](https://github.com/camlab-ethz/ConvolutionalNeuralOperator/tree/main/CNO2d_original_version)**
+    - All the instructions for this version can be found in the _readme.md_ file in the folder
+    - The code is more complex to configure compared to the vanilla CNO code (see below)
 
-	python3 -m pip install -r requirements.txt
+2. **Vanilla CNO2d and CNO1d versions are located in the folders [CNO2d_vanilla_torch_version](https://github.com/camlab-ethz/ConvolutionalNeuralOperator/tree/main/CNO2d_vanilla_torch_version) and [CNO1d_vanilla_torch_version](https://github.com/camlab-ethz/ConvolutionalNeuralOperator/tree/main/CNO1d_vanilla_torch_version)**
+    - All the instructions for these versions can be found in the _readme.md_ files in the folders
+    - The models are termed as "vanilla CNO" as the interpolation filters cannot be manually designed
+    - The codes do not utilize the CUDA kernel, making them simple to configure
+ 
+3. **Codes for the other baselines are located in the folder [_OtherModels](https://github.com/camlab-ethz/ConvolutionalNeuralOperator/tree/main/_OtherModels)**
 
 
-### Note:
-
-### The original CNO code can be found in the folder _CNO2d_original_version_!
-
-1. **Training a CNO is slow on CPU. We suggest the training to be run on a GPU!**
-
-2. To run the original CNO code, one needs the CUDA toolkit 11.1 or later. This toolkit is **NOT** the same as cudatoolkit from Conda. Please visit the page https://developer.nvidia.com/cuda-toolkit for installation!
-
-3. **Vanilla CNO** versions do not require special CUDA toolkit installation.
-	
-4.	To run the CNO code on Linux, one needs GCC 7 or later compiler.
-	To run the CNO code on Windows, one needs Visual Studio compiler.
-
-5.	To run the CNO code, one needs ninja build system.
-
-Implementation of the filters from the original CNO (_CNO2d_original_version_) code is borrowed from the paper *Alias-Free Generative Adversarial Networks (StyleGAN3)*. 
-Their official github page is https://github.com/NVlabs/stylegan3. 
-
-Vanilla CNO versions use antialias interpolation methods from the pytorch library.
-
-<br />
-
-**Note: To train or evaluate models other than CNO, please move the required files/scripts/modules from the folder __OtherModels_ to the _CNO2d_original_version_ folder.**
-
-## CNO1d and CNO2d (vanilla pytorch version)
-
-We recently added 1d and 2d _vanilla_ implementation of CNO. The models are termed as "vanilla CNO" as the interpolation filters cannot be manually designed. The vanilla CNO1d and CNO2d codes have been modified from a tutorial featured in the ETH Zurich course "AI in the Sciences and Engineering." Git page for this course: https://github.com/bogdanraonic3/AI_Science_Engineering 
-
-The codes do not utilize the CUDA kernel, making it significantly simpler to configure compared to the standard CNO. For up/downsampling, the antialias interpolation functions from the torch library are utilized, limiting the ability to design your own low-pass filters at present. 
-
-While acknowledging this suboptimal setup, the performance of the vanilla CNO1d and CNO2d remain commendable. 
-
-## Source Data
+## Datasets
 We cover instances of the Poisson, Wave, Navier-Stokes, Allen-Cahn, Transport and Compressible Euler equations and Darcy flow. Data can be downloaded from https://zenodo.org/records/10406879 (~2.4GB).
 
 Alternatively, run the script `download_data.py` which downloads all required data into the appropriate folder (it requires 'wget' to be installed on your system).
@@ -77,66 +49,4 @@ Alternatively, run the script `download_data.py` which downloads all required da
 
 
 The "data.zip" needs to be unzipped.
-
-## Models Training
-Each of the baselines described in the paper can be trained by running the python scripts
-
-
-	Train**.py
-
-
-where ** holds for:
-
-	- CNO:    CNO model
-	- FNO:    FNO model
-	- DON:    DeepONet model
-	...
-
-#### * Note that the models other than vanilla CNO ones must be ran from the folder _CNO2d_original_version_.
-
-The models' hyperparameter can be specified in the corresponding python scripts as well.
-
-To select the benchmark experiment for FNO and CNO to be trained, the variable "which_example" in a corresponding script Tran**.py should have one of the following values:
-
-    poisson             : Poisson equation 
-    wave_0_5            : Wave equation
-    cont_tran           : Smooth Transport
-    disc_tran           : Discontinuous Transport
-    allen               : Allen-Cahn equation
-    shear_layer         : Navier-Stokes equations
-    airfoil             : Compressible Euler equations
-    darcy               : Darcy Flow
-    
-
-The following files in _CNO2d_original_version_ correspond to:
-
-	Problems/CNOBenchmark.py :            Dataloader for CNO model
-	_OtherBenchamrks/FNOBenchmark.py :    Dataloader for FNO model
-	_OtherBenchamrks/BenchmarksDON.py:    Dataloader for DeepONet model
-        ...	
-
-## Hyperparameters Grid/Random Search
-Cross validation for each model can be run with:
-
-
-	python3 ModelSelection**.py
-
-
-where ** correspond to a model, as noted above.
-
-The hyperparameters of the best-performing models reported in the Supplementary Materials are obtained in this way.
-
-
-#### Note
-If a slurm-base cluster is available, set sbatch=True and cluster="true" in the scripts. We ran the codes on a local cluster (Euler cluster).
-
-
-## Error Computations
-
-To compute the relative L1 median errors of the CNO and FNO models, one scould run the scripts "ErrorDistribution.py". The script is located in the folder _CNO2d_original_version_.
-
-In the "ErrorDistribution.py" file, one should select the variable "which", corresponding to a benchmark experiment. 
-
-In the same file, one can set a variable "plot = True" to plot a random sample and predictions for the CNO and FNO models.
-One can also set "plot = False" to compute the errors for the CNO and FNO models. By selecting "in_dist = False", one obtains out-of-distribution test errors. 
 
