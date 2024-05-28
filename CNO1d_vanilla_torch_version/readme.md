@@ -7,7 +7,7 @@
 ## What is different?
 - For up/downsampling, the antialias interpolation functions from the  torch library are utilized, limiting the ability to design your own low-pass filters at present.
 
-- While acknowledging this suboptimal setup, the performance of CNO1d remains commendable.
+- The performance of CNO1d remains commendable.
 
 ## Training
 
