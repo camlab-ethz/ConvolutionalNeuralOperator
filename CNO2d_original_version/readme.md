@@ -10,6 +10,8 @@
 
 Implementation of the filters from the original CNO code is borrowed from the paper *Alias-Free Generative Adversarial Networks (StyleGAN3)* -- see their [github page](https://github.com/NVlabs/stylegan3).
 
+#### Note: If you are unable to install cudatoolkit or other libraries, you can select *lrelu* as the activation function (torch version of cno_lrelu).
+
 <br />
 
 ## Training
@@ -26,8 +28,7 @@ Important hyperparameters related to the CNO architecture are:
 | N_res | number of residual blocks in the middle networks |
 | N_res_neck |  number of residual blocks in the bottleneck |
 | in_size |  resolution of the computational grid |
-
-Other parameters should be kept unchanged.
+| activation | cno_lrelu or lrelu; lrelu is torch version of cno_lrelu|
 
 <br />
 
@@ -55,6 +56,9 @@ corresponds to the dataloaders for the CNO model.
 
 - To run your own experiment, you should write your own class in the CNOBenchmarks.py.
 - Once the class is coded, you should load your data in the TrainCNO.py file.
+
+## Datasets
+We cover instances of the Poisson, Wave, Navier-Stokes, Allen-Cahn, Transport and Compressible Euler equations and Darcy flow. Data can be downloaded from https://zenodo.org/records/10406879 (~2.4GB).
 
 
 ## Hyperparameters Grid/Random Search
