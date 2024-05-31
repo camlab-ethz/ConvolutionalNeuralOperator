@@ -64,3 +64,18 @@ We also provide all datasets used in the paper [Poseidon: Efficient Foundation M
 - [🤗 Hub – Downstream Tasks](https://huggingface.co/collections/camlab-ethz/poseidon-downstream-tasks-664fa237cd6b0c097971ef14)
 
 ### Please also visit [Poseidon github page](https://github.com/camlab-ethz/poseidon).
+
+## Citation
+
+If you use our models, code, or datasets, please consider citing our paper:
+
+```bibtex
+@misc{CNO,
+      title={Convolutional Neural Operators for robust and accurate learning of PDEs}, 
+      author={Bogdan Raonić and Roberto Molinaro and Tim De Ryck and Tobias Rohner and Francesca Bartolucci and Rima Alaifari and Siddhartha Mishra and Emmanuel de Bézenac},
+      year={2023},
+      eprint={2302.01178},
+      archivePrefix={arXiv},
+      primaryClass={cs.LG}
+}
+```
