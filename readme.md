@@ -3,7 +3,9 @@
 - This repository is the official implementation of the paper **Convolutional Neural Operators for robust and accurate learning of PDEs** (see https://arxiv.org/pdf/2302.01178.pdf)
 - The paper was presented at **NeurIPS 2023**
 - **Representative PDE Benchmarks (RPB) are available at** https://zenodo.org/records/10406879
-- **Read our blog at** https://link.medium.com/Mht8Th5OhFb
+- **Read our blog about CNOs at** https://link.medium.com/Mht8Th5OhFb
+- This repository also covers CNO codes used in the paper [Poseidon: Efficient Foundation Models for PDEs](https://arxiv.org/abs/2405.19101)
+
 
 The CNO is tested on a novel set of benchmarks, termed as Representative PDE Benchmarks (RPB). The CNO is either on-par or outperformed the tested baselines on all the benchmarks, both when testing in-distribution as well as in out-of-distribution testing.
 
@@ -56,6 +58,9 @@ Alternatively, run the script `download_data.py` which downloads all required da
 
 	python3 download_data.py
 
+## Poseidon: Efficient Foundation Models for PDEs
+We also provide all datasets used in the paper [Poseidon: Efficient Foundation Models for PDEs](https://arxiv.org/abs/2405.19101) on the 🤗 Hub. You can download them from the respective collections: 
+- [🤗 Hub – Pretraining Datasets](https://huggingface.co/collections/camlab-ethz/poseidon-664fa125729c53d8607e209a)
+- [🤗 Hub – Downstream Tasks](https://huggingface.co/collections/camlab-ethz/poseidon-downstream-tasks-664fa237cd6b0c097971ef14)
 
-The "data.zip" needs to be unzipped.
-
+### Please also visit [Poseidon github page](https://github.com/camlab-ethz/poseidon).
