@@ -4,7 +4,7 @@
 - The paper was presented at **NeurIPS 2023**
 - **Representative PDE Benchmarks (RPB) are available at** https://zenodo.org/records/10406879
 - **Read our blog about CNOs at** https://link.medium.com/Mht8Th5OhFb
-- This repository also covers CNO codes used in the paper [Poseidon: Efficient Foundation Models for PDEs](https://arxiv.org/abs/2405.19101)
+- This repository also covers CNO codes used in the paper [Poseidon: Efficient Foundation Models for PDEs](https://arxiv.org/abs/2405.19101) (see [github page](https://github.com/camlab-ethz/poseidon)).
 
 
 The CNO is tested on a novel set of benchmarks, termed as Representative PDE Benchmarks (RPB). The CNO is either on-par or outperformed the tested baselines on all the benchmarks, both when testing in-distribution as well as in out-of-distribution testing.
