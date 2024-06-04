@@ -46,6 +46,7 @@ We assess the test errors of the CNO and other baselines at different testing re
    - The CNO - Foundation Model (109M) code is used in the paper [Poseidon: Efficient Foundation Models for PDEs](https://arxiv.org/abs/2405.19101)
    - All the instructions for the CNO - Foundation Model can be found in the _readme.md_ file in the folder
    - Codes for finetuning the CNO-FM are also located in the folder.
+   - One can download the weights CNO-Foundation Model (109M) on [this link](https://zenodo.org/records/11401801).
 
 5. **Codes for the other baselines are located in the folder [_OtherModels](https://github.com/camlab-ethz/ConvolutionalNeuralOperator/tree/main/_OtherModels)**
 
