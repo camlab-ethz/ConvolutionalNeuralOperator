@@ -1,10 +1,12 @@
 # Convolutional Neural Operators for robust and accurate learning of PDEs
 
-- This repository is the official implementation of the paper **Convolutional Neural Operators for robust and accurate learning of PDEs** (see https://arxiv.org/pdf/2302.01178.pdf)
+- This repository is the official implementation of the paper [**Convolutional Neural Operators for robust and accurate learning of PDEs**](https://arxiv.org/pdf/2302.01178.pdf)
 - The paper was presented at **NeurIPS 2023**
-- **Representative PDE Benchmarks (RPB) are available at** https://zenodo.org/records/10406879
-- **Read our blog about CNOs at** https://link.medium.com/Mht8Th5OhFb
-- This repository also covers CNO codes used in the paper [Poseidon: Efficient Foundation Models for PDEs](https://arxiv.org/abs/2405.19101) (see [github page](https://github.com/camlab-ethz/poseidon)).
+- **Representative PDE Benchmarks (RPB) are available at [this link](https://zenodo.org/records/10406879)** 
+- **Read our blog about CNOs at [this link](https://link.medium.com/Mht8Th5OhFb)** 
+- This repository also covers CNO codes used in the paper [**Poseidon: Efficient Foundation Models for PDEs**](https://arxiv.org/abs/2405.19101)
+- Vist [**this link**](https://github.com/camlab-ethz/ConvolutionalNeuralOperator/tree/main/CNO2d_time_dependent_%26_foundation_model) for **time-dependent CNO** and **CNO - foundation model**
+- Visit [**Poseidon github page**](https://github.com/camlab-ethz/poseidon)
 
 
 The CNO is tested on a novel set of benchmarks, termed as Representative PDE Benchmarks (RPB). The CNO is either on-par or outperformed the tested baselines on all the benchmarks, both when testing in-distribution as well as in out-of-distribution testing.
@@ -39,11 +41,10 @@ We assess the test errors of the CNO and other baselines at different testing re
     - The codes do not utilize the CUDA kernel, making them simple to configure
 
 3. **Codes for Time-Dependent CNO2d are located in the folder** - [CNO2d_time_dependent_&_foundation_model](https://github.com/camlab-ethz/ConvolutionalNeuralOperator/tree/main/CNO2d_time_dependent_%26_foundation_model)
-   - The Time-Dependent CNO code is used in the paper [Poseidon: Efficient Foundation Models for PDEs](https://arxiv.org/abs/2405.19101)
+   - The Time-Dependent CNO and CNO - Foundation Model codes are used in the paper [Poseidon: Efficient Foundation Models for PDEs](https://arxiv.org/abs/2405.19101)
    - All the instructions for the Time-Dependent CNO can be found in the _readme.md_ file in the folder
 
 4. **Codes for CNO - Foundation Model are located in the folder** - [CNO2d_time_dependent_&_foundation_model](https://github.com/camlab-ethz/ConvolutionalNeuralOperator/tree/main/CNO2d_time_dependent_%26_foundation_model)
-   - The CNO - Foundation Model (109M) code is used in the paper [Poseidon: Efficient Foundation Models for PDEs](https://arxiv.org/abs/2405.19101)
    - All the instructions for the CNO - Foundation Model can be found in the _readme.md_ file in the folder
    - Codes for finetuning the CNO-FM are also located in the folder.
    - One can download the weights CNO-Foundation Model (109M) on [this link](https://zenodo.org/records/11401801).
