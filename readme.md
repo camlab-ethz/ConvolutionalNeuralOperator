@@ -15,7 +15,7 @@ The CNO is tested on a novel set of benchmarks, termed as Representative PDE Ben
  <img src="/figures/table.png" width="750"/>
 </p>
 <p align="center">
-    <em>Relative median L¹ test errors, for both in- and out-of-distribution testing, for different benchmarks and models..</em>
+    <em>Relative median L¹ test errors, for both in- and out-of-distribution testing, for different benchmarks and models.</em>
 </p>
 <br />
 
