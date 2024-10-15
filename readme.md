@@ -57,7 +57,6 @@ We cover instances of the Poisson, Wave, Navier-Stokes, Allen-Cahn, Transport an
 
 Alternatively, run the script `download_data.py` which downloads all required data into the appropriate folder (it requires 'wget' to be installed on your system).
 
-
 	python3 download_data.py
 
 ## Poseidon: Efficient Foundation Models for PDEs
