@@ -85,7 +85,7 @@ def main():
             test_relative_l2 = 0.0
             for step, (input_batch, output_batch) in enumerate(testing_set):
                 output_pred_batch = cno(input_batch)
-                loss_f = (torch.mean((abs(output_pred_batch - output_batch))) / torch.mean(abs(output_batch))) ** 0.5 * 100
+                loss_f = torch.mean(torch.sum(abs(output_pred_batch - output_batch), dim=(1,2)) / torch.sum(abs(output_batch), dim=(1,2))) ** 0.5 * 100
                 test_relative_l2 += loss_f.item()
             test_relative_l2 /= len(testing_set)
 
