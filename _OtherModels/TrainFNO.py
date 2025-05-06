@@ -15,8 +15,8 @@ if len(sys.argv) == 2:
     training_properties = {
         "learning_rate": 0.001,
         "weight_decay": 1e-8,
-        "scheduler_step": 0.97,
-        "scheduler_gamma": 10,
+        "scheduler_step": 10,
+        "scheduler_gamma": 0.97,
         "epochs": 1000,
         "batch_size": 16,
         "exp": 1,
@@ -155,7 +155,7 @@ for epoch in range(epochs):
                     output_pred_batch[input_batch==1] = 1
                     output_batch[input_batch==1] = 1
                 
-                loss_f = torch.mean(abs(output_pred_batch - output_batch)) / torch.mean(abs(output_batch)) * 100
+                loss_f = torch.mean(torch.sum(abs(output_pred_batch - output_batch), dim=(1,2)) / torch.sum(abs(output_batch), dim=(1,2))) * 100
                 test_relative_l2 += loss_f.item()
             test_relative_l2 /= len(test_loader)
             
@@ -168,7 +168,7 @@ for epoch in range(epochs):
                         output_pred_batch[input_batch==1] = 1
                         output_batch[input_batch==1] = 1
                     
-                    loss_f = torch.mean(abs(output_pred_batch - output_batch)) / torch.mean(abs(output_batch)) * 100
+                    loss_f = torch.mean(torch.sum(abs(output_pred_batch - output_batch), dim=(1,2)) / torch.sum(abs(output_batch), dim=(1,2))) * 100
                     train_relative_l2 += loss_f.item()
             train_relative_l2 /= len(train_loader)
             

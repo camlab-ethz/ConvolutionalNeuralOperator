@@ -183,7 +183,7 @@ for epoch in range(epochs):
                     output_pred_batch[input_batch==1] = 1
                     output_batch[input_batch==1] = 1
                 
-                loss_f = torch.mean(abs(output_pred_batch - output_batch)) / torch.mean(abs(output_batch)) * 100
+                loss_f = torch.mean(torch.sum(abs(output_pred_batch - output_batch), dim=(1,2)) / torch.sum(abs(output_batch), dim=(1,2))) * 100
                 test_relative_l2 += loss_f.item()
             test_relative_l2 /= len(val_loader)
 
@@ -196,7 +196,7 @@ for epoch in range(epochs):
                     output_pred_batch[input_batch==1] = 1
                     output_batch[input_batch==1] = 1
 
-                    loss_f = torch.mean(abs(output_pred_batch - output_batch)) / torch.mean(abs(output_batch)) * 100
+                    loss_f = torch.mean(torch.sum(abs(output_pred_batch - output_batch), dim=(1,2)) / torch.sum(abs(output_batch), dim=(1,2))) * 100
                     train_relative_l2 += loss_f.item()
             train_relative_l2 /= len(train_loader)
             

@@ -1327,7 +1327,7 @@ class CNO_time(pl.LightningModule):
         nbytes = 0
 
         for param in self.parameters():
-            nparams += param.numel()
+            nparams += param.numel()*(param.is_complex() + 1)
             nbytes += param.data.element_size() * param.numel()
 
         print(f'Total number of model parameters: {nparams} (~{format_tensor_size(nbytes)})')
