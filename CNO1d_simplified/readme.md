@@ -1,5 +1,5 @@
 
-# CNO1d - Vanilla Version
+# CNO1d - Simplified Version
 
 - The CNO1d code has been modified from a tutorial featured in the ETH Zurich course "AI in the Sciences and Engineering."
 - Git page for this course: https://github.com/bogdanraonic3/AI_Science_Engineering 
