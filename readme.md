@@ -31,20 +31,20 @@ We assess the test errors of the CNO and other baselines at different testing re
 
 ## Code Instructions:
 
-1. **The original CNO code from NeurIPS 2023 is located in the folder [CNO2d_original_version](https://github.com/camlab-ethz/ConvolutionalNeuralOperator/tree/main/CNO2d_original_version)**
+1. **The original CNO code from NeurIPS 2023 is located in the folder [CNO2d_classic](https://github.com/camlab-ethz/ConvolutionalNeuralOperator/tree/main/CNO2d_classic)**
     - All the instructions for this version can be found in the _readme.md_ file in the folder
     - The code is more complex to configure compared to the vanilla CNO code (see below)
 
-2. **Vanilla CNO2d and CNO1d versions are located in the folders [CNO2d_vanilla_torch_version](https://github.com/camlab-ethz/ConvolutionalNeuralOperator/tree/main/CNO2d_vanilla_torch_version) and [CNO1d_vanilla_torch_version](https://github.com/camlab-ethz/ConvolutionalNeuralOperator/tree/main/CNO1d_vanilla_torch_version)**
+2. **Vanilla CNO2d and CNO1d versions are located in the folders [CNO2d_simplified](https://github.com/camlab-ethz/ConvolutionalNeuralOperator/tree/main/CNO2d_simplified) and [CNO1d_simplified](https://github.com/camlab-ethz/ConvolutionalNeuralOperator/tree/main/CNO1d_simplified)**
     - All the instructions for these versions can be found in the _readme.md_ files in the folders
     - The models are termed as "vanilla CNO" as the interpolation filters cannot be manually designed
     - The codes do not utilize the CUDA kernel, making them simple to configure
 
-3. **Codes for Time-Dependent CNO2d are located in the folder** - [CNO2d_time_dependent_&_foundation_model](https://github.com/camlab-ethz/ConvolutionalNeuralOperator/tree/main/CNO2d_time_dependent_%26_foundation_model)
+3. **Codes for Time-Dependent CNO2d are located in the folder** - [CNO2d_temporal](https://github.com/camlab-ethz/ConvolutionalNeuralOperator/tree/main/CNO2d_temporal)
    - The Time-Dependent CNO and CNO - Foundation Model codes are used in the paper [Poseidon: Efficient Foundation Models for PDEs](https://arxiv.org/abs/2405.19101)
    - All the instructions for the Time-Dependent CNO can be found in the _readme.md_ file in the folder
 
-4. **Codes for CNO - Foundation Model are located in the folder** - [CNO2d_time_dependent_&_foundation_model](https://github.com/camlab-ethz/ConvolutionalNeuralOperator/tree/main/CNO2d_time_dependent_%26_foundation_model)
+4. **Codes for CNO - Foundation Model are located in the folder** - [CNO2d_temporal](https://github.com/camlab-ethz/ConvolutionalNeuralOperator/tree/main/CNO2d_temporal)
    - All the instructions for the CNO - Foundation Model can be found in the _readme.md_ file in the folder
    - Codes for finetuning the CNO-FM are also located in the folder.
    - One can download the weights CNO-Foundation Model (109M) on [this link](https://zenodo.org/records/11401801).
